@@ -55,8 +55,7 @@ if($api->json->title && $api->json->email && $api->json->domain) {
 				$api->json->domain,
 				$user_id);
 			if(is_wp_error($site_id))
-				print_r($site_id);
-				//$api->error();
+				$api->error($site_id);
 			$api->send_site_creation_notifications($site_id, $api->json->email);
 			$api->respond_with_json(array(
 				"success"=>true,
