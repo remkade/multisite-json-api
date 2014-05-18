@@ -50,12 +50,12 @@ Username and password are passed with the HTTP Headers `Username` and `Password`
 
 Create Site
 -----------
-**URL:** /wp-content/multisite-json-api/endpoints/create-site.php
-**Method:** POST
-**Works with subdomains?:** yes
-**Works with subdirectories?** yes
-**Payload example:** `{"email": "user@example.com", "sitename": "awesomeblog", "title": "Awesome Blog"}` 
-**Description:** Creates a site. If the email address does not exist this will create a new user with that email address. The `sitename` is the the path or subdomain you would like to use.
+- **URL:** /wp-content/multisite-json-api/endpoints/create-site.php
+- **Method:** POST
+- **Works with subdomains?:** yes
+- **Works with subdirectories?** yes
+- **Payload example:** `{"email": "user@example.com", "sitename": "awesomeblog", "title": "Awesome Blog"}` 
+- **Description:** Creates a site. If the email address does not exist this will create a new user with that email address. The `sitename` is the the path or subdomain you would like to use.
 
 Acknowledgements
 ----------------
