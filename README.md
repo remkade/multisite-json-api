@@ -7,11 +7,11 @@ This plugin aims to be simple to make Wordpress polyglot environments not only p
 Status
 ------
 * `create-site.php` works, but it will allow creation of duplicate sites. Need to figure out how to fix that.
-* TODO: Make endpoints check to see if plugin is enabled
-* TODO: Add some configuration options
-* TODO: Add `list-sites.php`
-* TODO: Add `delete-site.php`
-* TODO: Add `full-stack-test.php` to make a MySQL connection and verify the whole stack loads, faster and more efficient than trying to do a full page rendering for your uptime checks.
+* **TODO**: Make endpoints check to see if plugin is enabled
+* **TODO**: Add some configuration options
+* **TODO**: Add `list-sites.php`
+* **TODO**: Add `delete-site.php`
+* **TODO**: Add `full-stack-test.php` to make a MySQL connection and verify the whole stack loads, faster and more efficient than trying to do a full page rendering for your uptime checks.
 
 Security
 --------
@@ -46,7 +46,7 @@ Authentication
 --------------
 All of the enpoints require you to authenticate with an existing wordpress user. Currently all require the superadmin role, but that may change.
 
-Username and password are passed with the HTTP Headers `Username` and `Password` respectively. These are plain text, so hence why you need to be using SSL (which you are doing already right??).
+Username and password are passed with the HTTP Headers `Username` and `Password` respectively. These are plain text so you need to be using SSL (which you are doing already right?).
 
 Create Site
 -----------
@@ -60,3 +60,7 @@ Create Site
 Acknowledgements
 ----------------
 Used the great Wordpress boiler plate template to get this thing off the ground.
+
+License
+-------
+Same as WordPress GPLv2.
