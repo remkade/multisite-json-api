@@ -6,10 +6,7 @@ This plugin aims to be simple to make Wordpress polyglot environments not only p
 
 Status
 ------
-* `create-site.php` works, but it will allow creation of duplicate sites. Need to figure out how to fix that.
-* **TODO**: Make endpoints check to see if plugin is enabled
 * **TODO**: Add some configuration options
-* **TODO**: Add `list-sites.php`
 * **TODO**: Add `delete-site.php`
 * **TODO**: Add `full-stack-test.php` to make a MySQL connection and verify the whole stack loads, faster and more efficient than trying to do a full page rendering for your uptime checks.
 

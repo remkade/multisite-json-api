@@ -12,12 +12,12 @@
  * @copyright 2014 Technica Sites LLC
  *
  * @wordpress-plugin
- * Plugin Name:       @TODO
- * Plugin URI:        @TODO
- * Description:       @TODO
+ * Plugin Name:       Multisite JSON API
+ * Plugin URI:        http://github.com/remkade/multisite-json-api
+ * Description:       A JSON API for managing multisite sites
  * Version:           0.0.1
- * Author:            @TODO
- * Author URI:        @TODO
+ * Author:            Kyle Leaders
+ * Author URI:        http://github.com/remkade
  * Text Domain:       en_US
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
