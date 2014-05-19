@@ -2,11 +2,11 @@
 /**
  * Plugin Name.
  *
- * @package   Plugin_Name
- * @author    Your Name <email@example.com>
+ * @package   Multsite_JSON_API
+ * @author    Kyle Leaders <kyle.leadeers@gmail.com>
  * @license   GPL-2.0+
- * @link      http://example.com
- * @copyright 2014 Your Name or Company Name
+ * @link      http://github.com/remkade/multisite-json-api
+ * @copyright 2014 Kyle Leaders
  */
 
 /**
@@ -18,19 +18,19 @@
  *
  * @TODO: Rename this class to a proper name for your plugin.
  *
- * @package Plugin_Name
- * @author  Your Name <email@example.com>
+ * @package Multisite_JSON_API
+ * @author  Kyle Leaders <kyle.leaders@gmail.com>
  */
-class Plugin_Name {
+class Multisite_JSON_API {
 
 	/**
 	 * Plugin version, used for cache-busting of style and script file references.
 	 *
-	 * @since   1.0.0
+	 * @since   0.0.1
 	 *
 	 * @var     string
 	 */
-	const VERSION = '1.0.0';
+	const VERSION = '0.0.1';
 
 	/**
 	 * @TODO - Rename "plugin-name" to the name of your plugin
@@ -42,16 +42,16 @@ class Plugin_Name {
 	 * of text. Its value should match the Text Domain file header in the main
 	 * plugin file.
 	 *
-	 * @since    1.0.0
+	 * @since    0.0.1
 	 *
 	 * @var      string
 	 */
-	protected $plugin_slug = 'plugin-name';
+	protected $plugin_slug = 'multisite-json-api';
 
 	/**
 	 * Instance of this class.
 	 *
-	 * @since    1.0.0
+	 * @since    0.0.1
 	 *
 	 * @var      object
 	 */
@@ -61,7 +61,7 @@ class Plugin_Name {
 	 * Initialize the plugin by setting localization and loading public scripts
 	 * and styles.
 	 *
-	 * @since     1.0.0
+	 * @since     0.0.1
 	 */
 	private function __construct() {
 
@@ -74,19 +74,12 @@ class Plugin_Name {
 		// Load public-facing style sheet and JavaScript.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-
-		/* Define custom functionality.
-		 * Refer To http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
-		 */
-		add_action( '@TODO', array( $this, 'action_method_name' ) );
-		add_filter( '@TODO', array( $this, 'filter_method_name' ) );
-
 	}
 
 	/**
 	 * Return the plugin slug.
 	 *
-	 * @since    1.0.0
+	 * @since    0.0.1
 	 *
 	 * @return    Plugin slug variable.
 	 */
@@ -97,7 +90,7 @@ class Plugin_Name {
 	/**
 	 * Return an instance of this class.
 	 *
-	 * @since     1.0.0
+	 * @since     0.0.1
 	 *
 	 * @return    object    A single instance of this class.
 	 */
@@ -114,7 +107,7 @@ class Plugin_Name {
 	/**
 	 * Fired when the plugin is activated.
 	 *
-	 * @since    1.0.0
+	 * @since    0.0.1
 	 *
 	 * @param    boolean    $network_wide    True if WPMU superadmin uses
 	 *                                       "Network Activate" action, false if
@@ -151,7 +144,7 @@ class Plugin_Name {
 	/**
 	 * Fired when the plugin is deactivated.
 	 *
-	 * @since    1.0.0
+	 * @since    0.0.1
 	 *
 	 * @param    boolean    $network_wide    True if WPMU superadmin uses
 	 *                                       "Network Deactivate" action, false if
@@ -189,7 +182,7 @@ class Plugin_Name {
 	/**
 	 * Fired when a new site is activated with a WPMU environment.
 	 *
-	 * @since    1.0.0
+	 * @since    0.0.1
 	 *
 	 * @param    int    $blog_id    ID of the new blog.
 	 */
@@ -211,7 +204,7 @@ class Plugin_Name {
 	 * - not spam
 	 * - not deleted
 	 *
-	 * @since    1.0.0
+	 * @since    0.0.1
 	 *
 	 * @return   array|false    The blog ids, false if no matches.
 	 */
@@ -231,7 +224,7 @@ class Plugin_Name {
 	/**
 	 * Fired for each blog when the plugin is activated.
 	 *
-	 * @since    1.0.0
+	 * @since    0.0.1
 	 */
 	private static function single_activate() {
 		// @TODO: Define activation functionality here
@@ -240,7 +233,7 @@ class Plugin_Name {
 	/**
 	 * Fired for each blog when the plugin is deactivated.
 	 *
-	 * @since    1.0.0
+	 * @since    0.0.1
 	 */
 	private static function single_deactivate() {
 		// @TODO: Define deactivation functionality here
@@ -249,7 +242,7 @@ class Plugin_Name {
 	/**
 	 * Load the plugin text domain for translation.
 	 *
-	 * @since    1.0.0
+	 * @since    0.0.1
 	 */
 	public function load_plugin_textdomain() {
 
@@ -264,7 +257,7 @@ class Plugin_Name {
 	/**
 	 * Register and enqueue public-facing style sheet.
 	 *
-	 * @since    1.0.0
+	 * @since    0.0.1
 	 */
 	public function enqueue_styles() {
 		wp_enqueue_style( $this->plugin_slug . '-plugin-styles', plugins_url( 'assets/css/public.css', __FILE__ ), array(), self::VERSION );
@@ -273,7 +266,7 @@ class Plugin_Name {
 	/**
 	 * Register and enqueues public-facing JavaScript files.
 	 *
-	 * @since    1.0.0
+	 * @since    0.0.1
 	 */
 	public function enqueue_scripts() {
 		wp_enqueue_script( $this->plugin_slug . '-plugin-script', plugins_url( 'assets/js/public.js', __FILE__ ), array( 'jquery' ), self::VERSION );
@@ -286,7 +279,7 @@ class Plugin_Name {
 	 *        Actions:    http://codex.wordpress.org/Plugin_API#Actions
 	 *        Reference:  http://codex.wordpress.org/Plugin_API/Action_Reference
 	 *
-	 * @since    1.0.0
+	 * @since    0.0.1
 	 */
 	public function action_method_name() {
 		// @TODO: Define your action hook callback here
@@ -299,7 +292,7 @@ class Plugin_Name {
 	 *        Filters: http://codex.wordpress.org/Plugin_API#Filters
 	 *        Reference:  http://codex.wordpress.org/Plugin_API/Filter_Reference
 	 *
-	 * @since    1.0.0
+	 * @since    0.0.1
 	 */
 	public function filter_method_name() {
 		// @TODO: Define your filter hook callback here

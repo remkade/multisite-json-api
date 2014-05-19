@@ -46,12 +46,6 @@ add_action( 'plugins_loaded', array( 'Multisite_JSON_API', 'get_instance' ) );
  *----------------------------------------------------------------------------*/
 
 /*
- * @TODO:
- *
- * - replace `class-plugin-name-admin.php` with the name of the plugin's admin file
- * - replace Multisite_JSON_API_Admin with the name of the class defined in
- *   `class-plugin-name-admin.php`
- *
  * If you want to include Ajax within the dashboard, change the following
  * conditional to:
  *
