@@ -5,7 +5,7 @@
 *	and relies on some wordpress functions.
 *
  */
-class JSON_API {
+class Multisite_JSON_API_Endpoint {
 	function __construct(){
 		$this->json = $this->get_post_data();
 	}

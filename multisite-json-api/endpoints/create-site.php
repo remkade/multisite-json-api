@@ -9,7 +9,7 @@ include_once($_SERVER['DOCUMENT_ROOT'].'/wp-load.php');
 include_once('../includes/class-json_api.php');
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
-$api = new JSON_API();
+$api = new Multisite_JSON_API_Endpoint();
 
 // Make sure the plugin is actually active
 if(!is_plugin_active('multisite-json-api'))
