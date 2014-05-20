@@ -47,27 +47,22 @@ You can install this using all the usual methods. The only thing different is th
 
 Take a look at the [github page](http://github.com/remkade/multisite-json-api/) for the full documentation.
 
-= What about foo bar? =
-
-Answer to foo bar dilemma.
-
 == Screenshots ==
 
 None
 
 == Changelog ==
 
-= 1.0 =
-* A change since the previous version.
-* Another change.
+= 0.5.0 =
+* Almost feature complete
 
-= 0.5 =
-* List versions from most recent at top to oldest at bottom.
+= 0.0.1 =
+* Initial creation
 
 == Upgrade Notice ==
 
-= 1.0 =
-Upgrade notices describe the reason a user should upgrade.  No more than 300 characters.
+= 0.5.0 =
+List and Create endpoints work.
 
 == API Documentation ==
 
