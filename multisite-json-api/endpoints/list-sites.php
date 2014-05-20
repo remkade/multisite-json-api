@@ -10,30 +10,41 @@ include_once('../includes/class-json_api.php');
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
 $api = new Multisite_JSON_API_Endpoint();
-
-// Make sure the plugin is actually active
-if(!is_plugin_active('multisite-json-api.php'))
-	$api->error('This plugin is not active', 500);
 /*
  * Authenticate the user using WordPress
  */
 $user = $api->authenticate();
+
 if($user) {
 	/*
 	 * Make sure user can actually create sites
 	 */
-	if($api->user_can_create_sites) {
+	if($api->user_can_create_sites()) {
 		error_log("Attempt to list sites by user '" . $_SERVER['HTTP_USER'] . "', but user does not have permission to manage sites in WordPress.");
 		$api->error("You don't have permission to manage sites", 403);
 	/*
 	 * User can list sites
 	 */
 	} else {
+		$public = null;
+		$spam = null;
+		$archived = null;
+		$deleted = null;
+
+		if(isset($_GET['public']))
+			$public = $_GET['public'];
+		if(isset($_GET['spam']))
+			$spam = $_GET['spam'];
+		if(isset($_GET['archived']))
+			$archived = $_GET['archived'];
+		if(isset($_GET['deleted']))
+			$deleted = $_GET['deleted'];
+
 		$sites = wp_get_sites(array(
-			"public" => $_GET['public'],
-			"spam" => $_GET['spam'],
-			"archived" => $_GET['archived'],
-			"deleted" => $_GET['deleted']
+			"public" => $public,
+			"spam" => $spam,
+			"archived" => $archived,
+			"deleted" => $deleted
 		));
 		$api->respond_with_json($sites, 200);
 	}

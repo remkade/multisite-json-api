@@ -7,15 +7,25 @@
  */
 class Multisite_JSON_API_Endpoint {
 	function __construct(){
+		if(! \is_plugin_active_for_network('multisite-json-api/multisite-json-api.php'))
+			$this->error('This plugin is not active', 500);
 		$this->json = $this->get_post_data();
 	}
 
+	/*
+	 * Dumps the given object to JSON and responds with the given status code
+	 * @since '0.0.1'
+	 */
 	public function respond_with_json($payload, $status=200) {
 		\status_header($status);
 		echo json_encode($payload)."\n";
 		die();
 	}
 
+	/*
+	 * Sends an error in JSON with the given status, then dies
+	 * @since '0.0.1'
+	 */
 	public function error($errors, $status=400) {
 		if(is_array($errors)) {
 			error_log(join(', ', $errors));
@@ -27,11 +37,19 @@ class Multisite_JSON_API_Endpoint {
 		$this->respond_with_json($output, $status);
 	}
 
+	/*
+	 * Pulls the post data in a hacky way required by PHP :(
+	 * @since '0.0.1'
+	 */
 	public function get_post_data() {
 		$post = file_get_contents('php://input');
 		return(json_decode($post));
 	}
 
+	/*
+	 * Authenticates using the HTTP Headers User and Password
+	 * @since '0.0.1'
+	 */
 	public function authenticate() {
 		$creds = array();
 		$creds['user_login'] = $_SERVER['HTTP_USER'];
@@ -42,7 +60,7 @@ class Multisite_JSON_API_Endpoint {
 			return false;
 		} else {
 			$u = \get_user_by('login', $creds['user_login']);
-			\set_current_user($u->id, '');
+			\wp_set_current_user($u->ID, '');
 			if(\current_user_can('manage_sites'))
 				return $user;
 			else
@@ -53,20 +71,25 @@ class Multisite_JSON_API_Endpoint {
 	/*
 	 * Checks whether sitename is a valid domain name or site name
 	 * Works on both domain and subdirectory
+	 * @since '0.0.1'
 	 */
 	public function is_valid_sitename($candidate) {
 		if (\is_subdomain_install()) {
 			/* This filter is documented in wp-includes/ms-functions.php */
-			$subdirectory_reserved_names = \apply_filters( 'subdirectory_reserved_names', array( 'page', 'comments', 'blog', 'files', 'feed'));
+			$subdirectory_reserved_names = \apply_filters( 'subdirectory_reserved_names', array( 'page', 'comments', 'blog', 'files', 'feed', 'wp-admin'));
 			return(in_array($candidate, $subdirectory_reserved_names));
 		} else {
 			return(preg_match('|^([a-zA-Z0-9-])+$|', $candidate));
 		}
 	}
 
+	/*
+	 * Validates that the site title is at least 2 alphanumerics and doesn't start with a space
+	 * @since '0.0.1'
+	 */
 	public function is_valid_site_title($candidate) {
 		// Make sure site title is not empty
-		return(preg_match('|^([a-zA-Z0-9-])+|', $candidate));
+		return(preg_match('|^[a-zA-Z0-9-_][a-zA-Z0-9-_ ]+|', $candidate));
 	}
 
 	public function is_valid_email($candidate) {
@@ -104,7 +127,7 @@ class Multisite_JSON_API_Endpoint {
 	 * If it does exist, just returns the existing user's id.
 	 * Sanitizes email address automatically.
 	 */
-	public function create_user_by_email($dirty_email) {
+	public function create_user_by_email($dirty_email, $domain) {
 		$email = \sanitize_email($dirty_email);
 		$user_id = \email_exists($email);
 		if ($user_id) {

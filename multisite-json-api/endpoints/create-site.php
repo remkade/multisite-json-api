@@ -11,10 +11,6 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
 $api = new Multisite_JSON_API_Endpoint();
 
-// Make sure the plugin is actually active
-if(!is_plugin_active('multisite-json-api'))
-	$api->error('This plugin is not active', 500);
-
 /*
  * Make sure we are given the correct JSON
  */
@@ -27,7 +23,7 @@ if($api->json->title && $api->json->email && $api->json->domain) {
 		/*
 		 * Make sure user can actually create sites
 		 */
-		if($api->user_can_create_sites) {
+		if($api->user_can_create_sites()) {
 			error_log("Attempt to create site via Multisite JSON API with user '" . $_SERVER['HTTP_USER'] . "', but user does not have permission to manage sites in WordPress.");
 			$api->error("You don't have permission to manage sites", 403);
 		/*
@@ -51,7 +47,7 @@ if($api->json->title && $api->json->email && $api->json->domain) {
 				$api->error($errors);
 
 			// Start creating stuff
-			$user_id = $api->create_user_by_email($api->json->email);
+			$user_id = $api->create_user_by_email($api->json->email, $api->json->domain);
 			if(is_wp_error($user_id)) {
 				print_r($user_id);
 				$api->error($user_id);
@@ -59,8 +55,13 @@ if($api->json->title && $api->json->email && $api->json->domain) {
 			$site_id = $api->create_site($api->json->title,
 				$api->json->domain,
 				$user_id);
-			if(is_wp_error($site_id))
-				$api->error(array_values($site_id));
+			if(is_wp_error($site_id)) {
+				$errors = array();
+				foreach($site_id->errors as $key => $error_array) {
+					array_push($errors, $error_array[0]);
+				}
+				$api->error($errors);
+			}
 			$api->send_site_creation_notifications($site_id, $api->json->email);
 			$api->respond_with_json(array(
 				"success"=>true,
