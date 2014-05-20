@@ -54,6 +54,16 @@ Create Site
 - **Payload example:** `{"email": "user@example.com", "sitename": "awesomeblog", "title": "Awesome Blog"}` 
 - **Description:** Creates a site. If the email address does not exist this will create a new user with that email address. The `sitename` is the the path or subdomain you would like to use.
 
+List Sites
+----------
+- **URL:** /wp-content/multisite-json-api/endpoints/list-sites.php
+- **Method:** GET
+- **Works with subdomains?:** yes
+- **Works with subdirectories?** yes
+- **Payload example:** No payload, only GET variables
+- **GET Variables:** public, spam, archived, deleted
+- **Description:** Lists sites by wordpress tags. All of the variables are boolean 0 or 1, and will list sites where that variable is set to the boolean provided. For example: `?public=1&deleted=0` will list all sites that are public but not deleted.
+
 Acknowledgements
 ----------------
 Used the great Wordpress boiler plate template to get this thing off the ground.
