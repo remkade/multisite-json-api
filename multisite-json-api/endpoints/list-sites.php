@@ -17,13 +17,13 @@ $user = $api->authenticate();
 
 if($user) {
 	/*
-	 * Make sure user can actually create sites
+	 * Make sure user has permissions to create sites
 	 */
 	if($api->user_can_create_sites()) {
 		error_log("Attempt to list sites by user '" . $_SERVER['HTTP_USER'] . "', but user does not have permission to manage sites in WordPress.");
 		$api->error("You don't have permission to manage sites", 403);
 	/*
-	 * User can list sites
+	 * User can create sites, so let them list sites
 	 */
 	} else {
 		$public = null;
