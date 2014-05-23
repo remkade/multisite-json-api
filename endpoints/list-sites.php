@@ -1,13 +1,5 @@
 <?php
-
-if(!defined('DOING_AJAX'))
-	define('DOING_AJAX', true);
-if(!defined('NOBLOGREDIRECT'))
-	define('NOBLOGREDIRECT', true);
-
-include_once($_SERVER['DOCUMENT_ROOT'].'/wp-load.php');
 include_once('../includes/class-json_api.php');
-include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
 $api = new Multisite_JSON_API_Endpoint();
 /*
@@ -46,7 +38,8 @@ if($user) {
 			"archived" => $archived,
 			"deleted" => $deleted
 		));
-		$api->respond_with_json($sites, 200);
+		$fixed = $api->fix_site_values($sites);
+		$api->respond_with_json($fixed, 200);
 	}
 } else {
 	$api->error('Invalid Username or Password', 403);

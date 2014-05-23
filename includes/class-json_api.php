@@ -1,15 +1,25 @@
 <?php
 
 /*
-*	This Classs assumes that WordPress has already been loaded
-*	and relies on some wordpress functions.
-*
+*	This Classs assumes that WordPress has already been loaded *	and relies on some wordpress functions.  *
  */
+
+
+if(!defined('DOING_AJAX'))
+	define('DOING_AJAX', true);
+if(!defined('NOBLOGREDIRECT'))
+	define('NOBLOGREDIRECT', true);
+
+include_once('nicejson.php');
+include_once('../../../../wp-load.php');
+include_once(ABSPATH . 'wp-admin/includes/plugin.php');
+include_once(ABSPATH . 'wp-admin/includes/ms.php');
+
 class Multisite_JSON_API_Endpoint {
 	function __construct(){
-		if(! \is_plugin_active_for_network('multisite-json-api/multisite-json-api.php'))
-			$this->error('This plugin is not active', 500);
+		$this->sanity_check();
 		$this->json = $this->get_post_data();
+		$this->request_method = $_SERVER['REQUEST_METHOD'];
 	}
 
 	/*
@@ -18,7 +28,7 @@ class Multisite_JSON_API_Endpoint {
 	 */
 	public function respond_with_json($payload, $status=200) {
 		\status_header($status);
-		echo json_encode($payload)."\n";
+		echo json_format($payload) . "\n";
 		die();
 	}
 
@@ -153,6 +163,14 @@ class Multisite_JSON_API_Endpoint {
 	}
 
 	/*
+	 * Wraps the wordpress delete blog function
+	 * @since '0.5.0'
+	 */
+	public function delete_site($id, $drop = false) {
+		return wpmu_delete_blog($id, $drop);
+	}
+
+	/*
 	 * TODO Have the automatic email thing configurable through Admin panel
 	 */
 	public function send_site_creation_notifications($id, $dirty_email) {
@@ -173,9 +191,17 @@ class Multisite_JSON_API_Endpoint {
 		\wpmu_welcome_notification( $id, $user_id, $password, $title, array( 'public' => 1 ));
 	}
 
+	private function plugin_is_active() {
+		if(! \is_plugin_active_for_network('multisite-json-api/multisite-json-api.php'))
+			$this->error('This plugin is not active', 500);
+	}
+
 	public function sanity_check() {
 		if(\is_multisite()) {
-			return true;
+			if(! \is_plugin_active_for_network('multisite-json-api/multisite-json-api.php'))
+				$this->error('This plugin is not active', 500);
+			else
+				return true;
 		} else {
 			error('This is not a multisite install, please enable multisite to use this plugin', 503);
 		}
@@ -183,6 +209,40 @@ class Multisite_JSON_API_Endpoint {
 
 	public function user_can_create_sites() {
 		\current_user_can('manage_sites');
+	}
+
+	/*
+	 * Fixes the odd string values returned by wordpress so that the JSON is correct
+	 */
+	public function fix_site_values($sites) {
+		return array_map('self::site_strings_to_values', $sites);
+	}
+
+	/*
+	 * This is necessary to convert all the odd strings wordpress gives to proper JSON values.
+	 * @since '0.5.0'
+	 */
+	public function site_strings_to_values($site) {
+		print_r($site);
+		$site['blog_id'] = intval($site['blog_id']);
+		$site['site_id'] = intval($site['site_id']);
+		$site['lang_id'] = intval($site['lang_id']);
+		$site['spam'] = $this->string_int_to_boolean($site['spam']);
+		$site['public'] = $this->string_int_to_boolean($site['public']);
+		$site['mature'] = $this->string_int_to_boolean($site['mature']);
+		$site['deleted'] = $this->string_int_to_boolean($site['deleted']);
+		$site['archived'] = $this->string_int_to_boolean($site['archived']);
+		return $site;
+	}
+
+	/*
+	 * Takes a string "0" or "1" and returns an actual boolean
+	 */
+	public function string_int_to_boolean($string) {
+		if(intval($string))
+			return true;
+		else
+			return false;
 	}
 }
 ?>
