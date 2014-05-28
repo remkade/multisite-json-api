@@ -6,7 +6,7 @@ $api = new Multisite_JSON_API_Endpoint();
 /*
  * Make sure we are given the correct JSON
  */
-if($api->json->id) {
+if(isset($api->json->blog_id)) {
 	if(!isset($api->json->drop))
 		$api->json->drop = false;
 
@@ -26,7 +26,7 @@ if($api->json->id) {
 		 */
 		} else {
 			// Start killing stuff
-			$site_id = $api->delete_site($api->json->id, $api->json->drop);
+			$site_id = $api->delete_site($api->json->blog_id, $api->json->drop);
 			if(is_wp_error($site_id)) {
 				$errors = array();
 				foreach($site_id->errors as $key => $error_array) {
@@ -35,17 +35,14 @@ if($api->json->id) {
 				$api->error($errors);
 			}
 
-			$api->respond_with_json(array(
-				"success"=>true,
-				"messages"=>array('Site deleted'),
-				"url" => str_replace('\\', '', get_site_url($site_id))
-			), 202);
+			$site = $api->site_strings_to_values($api->get_site_by_id($site_id));
+			$api->respond_with_json($site, 202);
 		}
 	} else {
 		$api->error('Invalid Username or Password', 403);
 		die();
 	}
 } else {
-	$api->error('This endpoint needs a JSON payload of the form {"id": 1, "drop": true}');
+	$api->error('This endpoint needs a JSON payload of the form {"blog_id": 1, "drop": true}');
 }
 ?>
