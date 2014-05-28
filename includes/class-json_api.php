@@ -102,6 +102,11 @@ class Multisite_JSON_API_Endpoint {
 		return(preg_match('|^[a-zA-Z0-9-_][a-zA-Z0-9-_ ]+|', $candidate));
 	}
 
+	/*
+	 * Validates emails via the wordpress functions.
+	 * @since '0.0.1'
+	 * @param email_address
+	 */
 	public function is_valid_email($candidate) {
 		$email = \sanitize_email($candidate);
 		if(!empty($email) && \is_email($email))
@@ -164,10 +169,30 @@ class Multisite_JSON_API_Endpoint {
 
 	/*
 	 * Wraps the wordpress delete blog function
+	 * Apparently, this returns NULL always, so I wrap it to return the site or false if site doesn't exist.
 	 * @since '0.5.0'
 	 */
 	public function delete_site($id, $drop = false) {
-		return wpmu_delete_blog($id, $drop);
+		$site = $this->get_site_by_id($id);
+		if($site){
+			\wpmu_delete_blog($id, $drop);
+			$site->deleted = true;
+			return $site;
+		} else {
+			return false;
+		}
+	}
+
+	/*
+	 * Wraps the wordpress get_blog_details function and converts attributes to proper JSON values.
+	 * @since '0.5.0'
+	 */
+	public function get_site_by_id($id) {
+		$site = \get_blog_details($id);
+		if($site && !\is_wp_error($site))
+			return $this->site_strings_to_values($site);
+		else
+			return $site;
 	}
 
 	/*
@@ -196,6 +221,10 @@ class Multisite_JSON_API_Endpoint {
 			$this->error('This plugin is not active', 500);
 	}
 
+	/*
+	 * Check that this is Multsite and that this plugin is active
+	 * @since '0.0.1'
+	 */
 	public function sanity_check() {
 		if(\is_multisite()) {
 			if(! \is_plugin_active_for_network('multisite-json-api/multisite-json-api.php'))
@@ -220,18 +249,26 @@ class Multisite_JSON_API_Endpoint {
 
 	/*
 	 * This is necessary to convert all the odd strings wordpress gives to proper JSON values.
+	 * Sometimes WP gives an object and sometimes it gives just an array. I don't understand.
 	 * @since '0.5.0'
 	 */
-	public function site_strings_to_values($site) {
-		print_r($site);
-		$site['blog_id'] = intval($site['blog_id']);
-		$site['site_id'] = intval($site['site_id']);
-		$site['lang_id'] = intval($site['lang_id']);
-		$site['spam'] = $this->string_int_to_boolean($site['spam']);
-		$site['public'] = $this->string_int_to_boolean($site['public']);
-		$site['mature'] = $this->string_int_to_boolean($site['mature']);
-		$site['deleted'] = $this->string_int_to_boolean($site['deleted']);
-		$site['archived'] = $this->string_int_to_boolean($site['archived']);
+	public function site_strings_to_values($bad_site) {
+		// For cases when we have an array, convert it to an object
+		if(is_array($bad_site))
+			$bad_site = (object)$bad_site;
+
+		// Clone the original so we don't modify the original
+		$site = clone($bad_site);
+
+		// Fix the bad strings
+		$site->blog_id = intval($bad_site->blog_id);
+		$site->site_id = intval($bad_site->site_id);
+		$site->lang_id = intval($bad_site->lang_id);
+		$site->spam = $this->string_int_to_boolean($bad_site->spam);
+		$site->public = $this->string_int_to_boolean($bad_site->public);
+		$site->mature = $this->string_int_to_boolean($bad_site->mature);
+		$site->deleted = $this->string_int_to_boolean($bad_site->deleted);
+		$site->archived = $this->string_int_to_boolean($bad_site->archived);
 		return $site;
 	}
 
