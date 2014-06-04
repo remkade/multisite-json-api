@@ -1,7 +1,9 @@
 <?php
-include_once('../includes/class-json_api.php');
 
-$api = new Multisite_JSON_API_Endpoint();
+include_once('../includes/boot.php');
+include_once('../includes/class-endpoint.php');
+
+$api = new Multisite_JSON_API\Endpoint();
 
 /*
  * Make sure we are given the correct JSON
@@ -41,7 +43,6 @@ if($api->json->title && $api->json->email && $api->json->domain) {
 			// Start creating stuff
 			$user_id = $api->create_user_by_email($api->json->email, $api->json->domain);
 			if(is_wp_error($user_id)) {
-				print_r($user_id);
 				$api->error($user_id);
 			}
 			$site_id = $api->create_site($api->json->title,

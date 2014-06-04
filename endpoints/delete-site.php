@@ -1,7 +1,7 @@
 <?php
-include_once('../includes/class-json_api.php');
+include_once('../includes/class-endpoint.php');
 
-$api = new Multisite_JSON_API_Endpoint();
+$api = new Multisite_JSON_API\Endpoint();
 
 /*
  * Make sure we are given the correct JSON

@@ -1,21 +1,8 @@
 <?php
 
-/*
-*	This Classs assumes that WordPress has already been loaded *	and relies on some wordpress functions.  *
- */
+namespace Multisite_JSON_API;
 
-
-if(!defined('DOING_AJAX'))
-	define('DOING_AJAX', true);
-if(!defined('NOBLOGREDIRECT'))
-	define('NOBLOGREDIRECT', true);
-
-include_once('nicejson.php');
-include_once('../../../../wp-load.php');
-include_once(ABSPATH . 'wp-admin/includes/plugin.php');
-include_once(ABSPATH . 'wp-admin/includes/ms.php');
-
-class Multisite_JSON_API_Endpoint {
+class Endpoint {
 	function __construct(){
 		$this->sanity_check();
 		$this->json = $this->get_post_data();
@@ -25,6 +12,7 @@ class Multisite_JSON_API_Endpoint {
 	/*
 	 * Dumps the given object to JSON and responds with the given status code
 	 * @since '0.0.1'
+	 * @return void
 	 */
 	public function respond_with_json($payload, $status=200) {
 		\status_header($status);
@@ -85,11 +73,11 @@ class Multisite_JSON_API_Endpoint {
 	 */
 	public function is_valid_sitename($candidate) {
 		if (\is_subdomain_install()) {
+			return(preg_match('|^[a-zA-Z0-9-]+$|', $candidate));
+		} else {
 			/* This filter is documented in wp-includes/ms-functions.php */
 			$subdirectory_reserved_names = \apply_filters( 'subdirectory_reserved_names', array( 'page', 'comments', 'blog', 'files', 'feed', 'wp-admin'));
-			return(in_array($candidate, $subdirectory_reserved_names));
-		} else {
-			return(preg_match('|^([a-zA-Z0-9-])+$|', $candidate));
+			return(!in_array($candidate, $subdirectory_reserved_names));
 		}
 	}
 
@@ -117,8 +105,8 @@ class Multisite_JSON_API_Endpoint {
 
 	public function full_domain($sitename, $current_site = null) {
 		if(empty($current_site))
-			$current_site = \get_current_site();
-		if(\is_subdomain_install()) {
+			$current_site = get_current_site();
+		if(is_subdomain_install()) {
 			$newdomain = $domain . '.' . preg_replace( '|^www\.|', '', $current_site->domain );
 		} else {
 			$newdomain = $current_site->domain;
@@ -226,8 +214,8 @@ class Multisite_JSON_API_Endpoint {
 	 * @since '0.0.1'
 	 */
 	public function sanity_check() {
-		if(\is_multisite()) {
-			if(! \is_plugin_active_for_network('multisite-json-api/multisite-json-api.php'))
+		if(is_multisite()) {
+			if(! is_plugin_active_for_network('multisite-json-api/multisite-json-api.php'))
 				$this->error('This plugin is not active', 500);
 			else
 				return true;
