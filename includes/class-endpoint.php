@@ -3,8 +3,7 @@
 namespace Multisite_JSON_API;
 
 class Endpoint {
-	function __construct(){
-		$this->sanity_check();
+	function __construct($testing=false){
 		$this->json = $this->get_post_data();
 		$this->request_method = $_SERVER['REQUEST_METHOD'];
 	}
@@ -15,9 +14,8 @@ class Endpoint {
 	 * @return void
 	 */
 	public function respond_with_json($payload, $status=200) {
-		\status_header($status);
-		echo json_format($payload) . "\n";
-		die();
+		status_header($status);
+		print json_format($payload);
 	}
 
 	/*
@@ -53,13 +51,13 @@ class Endpoint {
 		$creds['user_login'] = $_SERVER['HTTP_USER'];
 		$creds['user_password'] = $_SERVER['HTTP_PASSWORD'];
 		$creds['remember'] = true;
-		$user = \wp_signon( $creds, false );
-		if(\is_wp_error($user)) {
+		$user = wp_signon( $creds, false );
+		if(is_wp_error($user)) {
 			return false;
 		} else {
-			$u = \get_user_by('login', $creds['user_login']);
-			\wp_set_current_user($u->ID, '');
-			if(\current_user_can('manage_sites'))
+			$u = get_user_by('login', $creds['user_login']);
+			wp_set_current_user($u->ID, '');
+			if(current_user_can('manage_sites'))
 				return $user;
 			else
 				return false;
@@ -72,11 +70,11 @@ class Endpoint {
 	 * @since '0.0.1'
 	 */
 	public function is_valid_sitename($candidate) {
-		if (\is_subdomain_install()) {
+		if (is_subdomain_install()) {
 			return(preg_match('|^[a-zA-Z0-9-]+$|', $candidate));
 		} else {
 			/* This filter is documented in wp-includes/ms-functions.php */
-			$subdirectory_reserved_names = \apply_filters( 'subdirectory_reserved_names', array( 'page', 'comments', 'blog', 'files', 'feed', 'wp-admin'));
+			$subdirectory_reserved_names = apply_filters( 'subdirectory_reserved_names', array( 'page', 'comments', 'blog', 'files', 'feed', 'wp-admin'));
 			return(!in_array($candidate, $subdirectory_reserved_names));
 		}
 	}
@@ -96,8 +94,8 @@ class Endpoint {
 	 * @param email_address
 	 */
 	public function is_valid_email($candidate) {
-		$email = \sanitize_email($candidate);
-		if(!empty($email) && \is_email($email))
+		$email = sanitize_email($candidate);
+		if(!empty($email) && is_email($email))
 			return true;
 		else
 			return false;
@@ -116,8 +114,8 @@ class Endpoint {
 
 	public function full_path($sitename, $current_site = null) {
 		if(empty($current_site))
-			$current_site = \get_current_site();
-		if(\is_subdomain_install()) {
+			$current_site = get_current_site();
+		if(is_subdomain_install()) {
 			$path = $current_site->path;
 		} else {
 			$path = $current_site->path . $sitename . '/';
@@ -131,22 +129,22 @@ class Endpoint {
 	 * Sanitizes email address automatically.
 	 */
 	public function create_user_by_email($dirty_email, $domain) {
-		$email = \sanitize_email($dirty_email);
-		$user_id = \email_exists($email);
+		$email = sanitize_email($dirty_email);
+		$user_id = email_exists($email);
 		if ($user_id) {
 			return($user_id);
 		} else {
 			// Create a new user with a random password
-			$password = \wp_generate_password(12, false);
-			$user_id = \wpmu_create_user($domain, $password, $email);
+			$password = wp_generate_password(12, false);
+			$user_id = wpmu_create_user($domain, $password, $email);
 			if($user_id)
-				\wp_new_user_notification($user_id, $password);
+				wp_new_user_notification($user_id, $password);
 			return($user_id);
 		}
 	}
 
 	public function create_site($title, $domain, $user_id) {
-		$current_site = \get_current_site();
+		$current_site = get_current_site();
 		return wpmu_create_blog($this->full_domain($domain, $current_site),
 			$this->full_path($domain, $current_site),
 			$title,
@@ -163,7 +161,7 @@ class Endpoint {
 	public function delete_site($id, $drop = false) {
 		$site = $this->get_site_by_id($id);
 		if($site){
-			\wpmu_delete_blog($id, $drop);
+			wpmu_delete_blog($id, $drop);
 			$site->deleted = true;
 			return $site;
 		} else {
@@ -176,8 +174,8 @@ class Endpoint {
 	 * @since '0.5.0'
 	 */
 	public function get_site_by_id($id) {
-		$site = \get_blog_details($id);
-		if($site && !\is_wp_error($site))
+		$site = get_blog_details($id);
+		if($site && !is_wp_error($site))
 			return $this->site_strings_to_values($site);
 		else
 			return $site;
@@ -187,25 +185,25 @@ class Endpoint {
 	 * TODO Have the automatic email thing configurable through Admin panel
 	 */
 	public function send_site_creation_notifications($id, $dirty_email) {
-		$email = \sanitize_email($dirty_email);
+		$email = sanitize_email($dirty_email);
 		// Set the contents of the email
 		$admin_content = sprintf("New site created by Multisite JSON API User: %1$s\n\n\n\tAddress: %2$s\nName: %3$s",
 			$current_user->user_login,
-			\get_site_url($id),
-			\wp_unslash($title));
+			get_site_url($id),
+			wp_unslash($title));
 
 		// Send the email to admins
-		\wp_mail(\get_site_option('admin_email'),
+		wp_mail(get_site_option('admin_email'),
 			sprintf('[%s] New Site Created', $current_site->site_name),
 			$admin_content,
-			'From: "Mannasites Webmonkey" <' . \get_site_option('admin_email') . '>');
+			'From: "Mannasites Webmonkey" <' . get_site_option('admin_email') . '>');
 
 		// Send the email to the owner of the new site
-		\wpmu_welcome_notification( $id, $user_id, $password, $title, array( 'public' => 1 ));
+		wpmu_welcome_notification( $id, $user_id, $password, $title, array( 'public' => 1 ));
 	}
 
 	private function plugin_is_active() {
-		if(! \is_plugin_active_for_network('multisite-json-api/multisite-json-api.php'))
+		if(! is_plugin_active_for_network('multisite-json-api/multisite-json-api.php'))
 			$this->error('This plugin is not active', 500);
 	}
 
@@ -225,7 +223,7 @@ class Endpoint {
 	}
 
 	public function user_can_create_sites() {
-		\current_user_can('manage_sites');
+		current_user_can('manage_sites');
 	}
 
 	/*
