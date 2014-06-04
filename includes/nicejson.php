@@ -16,7 +16,7 @@
 function json_format($json) {
   if (!is_string($json)) {
     if (phpversion() && phpversion() >= 5.4) {
-      return json_encode($json, JSON_PRETTY_PRINT);
+      return json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     }
     $json = json_encode($json);
   }

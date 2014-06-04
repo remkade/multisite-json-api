@@ -22,13 +22,13 @@ class Endpoint {
 	 * Sends an error in JSON with the given status, then dies
 	 * @since '0.0.1'
 	 */
-	public function error($errors, $status=400) {
-		if(is_array($errors)) {
-			error_log(join(', ', $errors));
-			$output = array('errors' => $errors);
+	public function error($error, $error_id, $status=400, $url='http://github.com/remkade/multisite-json-api/wiki') {
+		if(is_array($error)) {
+			error_log(join(', ', $error));
+			$output = array('id'=> $error_id, 'message' => $error, 'url' => $url);
 		} else {
-			error_log($errors);
-			$output = array('errors' => array($errors));
+			error_log($error);
+			$output = array('id'=> $error_id, 'message' => $error, 'url' => $url);
 		}
 		$this->respond_with_json($output, $status);
 	}
@@ -85,7 +85,10 @@ class Endpoint {
 	 */
 	public function is_valid_site_title($candidate) {
 		// Make sure site title is not empty
-		return(preg_match('|^[a-zA-Z0-9-_][a-zA-Z0-9-_ ]+|', $candidate));
+		if(preg_match('/^[a-zA-Z0-9-_][a-zA-Z0-9-_ ]+/', $candidate))
+			return(true);
+		else
+			return(false);
 	}
 
 	/*

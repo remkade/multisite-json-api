@@ -22,15 +22,21 @@ class EndpointTest extends \PHPUnit_Framework_TestCase {
 		$this->api = new Endpoint();
 	}
 
-	public function testIsValidSiteTitle() {
+	public function testErrorConformsToHerokuErrors(){
+		$this->expectOutputString("{\n    \"id\": \"error_id\",\n    \"message\": \"Error!\",\n    \"url\": \"http://github.com/remkade/multisite-json-api/wiki\"\n}");
+		$this->api->error("Error!", "error_id", 400);
+	}
+
+	public function testIsValidSiteTitle(){
 		// Ensure that we have at least 1 character and that all characters are alphanumeric spaces or dashes
 		$this->assertFalse($this->api->is_valid_site_title(''));
 		$this->assertFalse($this->api->is_valid_site_title('!First character is not valid'));
 		$this->assertFalse($this->api->is_valid_site_title('?Que?'));
 
 		// Valid examples
-		$this->assertTrue($this->api->is_valid_site_title('a'));
-		$this->assertTrue($this->api->is_valid_site_title('1'));
+		$this->assertTrue($this->api->is_valid_site_title('a1'));
+		$this->assertTrue($this->api->is_valid_site_title('123'));
+		$this->assertTrue($this->api->is_valid_site_title('singleword'));
 		$this->assertTrue($this->api->is_valid_site_title('This is valid'));
 		$this->assertTrue($this->api->is_valid_site_title('Hyphens-are-ok'));
 	}
