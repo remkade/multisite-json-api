@@ -15,7 +15,7 @@
  * Plugin Name:       Multisite JSON API
  * Plugin URI:        http://github.com/remkade/multisite-json-api
  * Description:       A JSON API for managing multisite sites
- * Version:           0.0.1
+ * Version:           0.5.1
  * Author:            Kyle Leaders
  * Author URI:        http://github.com/remkade
  * Text Domain:       en_US
