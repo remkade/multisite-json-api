@@ -1,3 +1,3 @@
 <?php
-	require_once("../includes/class-endpoint.php");
+	require_once("includes/class-endpoint.php");
 ?>
