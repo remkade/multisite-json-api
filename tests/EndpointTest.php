@@ -1,8 +1,7 @@
 <?php
 namespace Multisite_JSON_API;
 
-
-require_once 'PHPUnit/Framework/TestCase.php';
+@include_once 'PHPUnit/Framework/TestCase.php';
 
 class EndpointTest extends \PHPUnit_Framework_TestCase {
 	public static $plugin_is_active;
