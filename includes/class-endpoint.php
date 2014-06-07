@@ -50,13 +50,12 @@ class Endpoint {
 		$creds = array();
 		$creds['user_login'] = $_SERVER['HTTP_USER'];
 		$creds['user_password'] = $_SERVER['HTTP_PASSWORD'];
-		$creds['remember'] = true;
-		$user = wp_signon( $creds, false );
+		$creds['remember'] = false;
+		$user = wp_signon($creds, false);
 		if(is_wp_error($user)) {
 			return false;
 		} else {
-			$u = get_user_by('login', $creds['user_login']);
-			wp_set_current_user($u->ID, '');
+			wp_set_current_user($user->ID, '');
 			if(current_user_can('manage_sites'))
 				return $user;
 			else

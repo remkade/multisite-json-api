@@ -1,12 +1,6 @@
 <?php
 namespace Multisite_JSON_API;
 
-function is_multisite() { return true; }
-function is_plugin_active_for_network($name) { return EndpointTest::$plugin_is_active; }
-function status_header($status_code) { }
-
-function get_current_site() {
-}
 
 require_once 'PHPUnit/Framework/TestCase.php';
 
@@ -25,6 +19,25 @@ class EndpointTest extends \PHPUnit_Framework_TestCase {
 	public function testErrorConformsToHerokuErrors(){
 		$this->expectOutputString("{\n    \"id\": \"error_id\",\n    \"message\": \"Error!\",\n    \"url\": \"http://github.com/remkade/multisite-json-api/wiki\"\n}");
 		$this->api->error("Error!", "error_id", 400);
+	}
+
+	/**
+	 * @dataProvider authenticateProvider
+	 */
+	public function testAuthenticate($username, $password, $result) {
+		$_SERVER['HTTP_USER'] = $username;
+		$_SERVER['HTTP_PASSWORD'] = $password;
+
+		$this->assertEquals($this->api->authenticate(), $result);
+	}
+
+	public function authenticateProvider() {
+		return array(
+			array('invalid', 'invalid', false),
+			array('fakeuser', 'password', false),
+			array('user', 'not the right password', false),
+			array('admin', 'password', get_user_by('login', 'admin'))
+		);
 	}
 
 	public function testIsValidSiteTitle(){
