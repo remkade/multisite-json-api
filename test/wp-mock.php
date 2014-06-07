@@ -3,9 +3,9 @@ namespace Multisite_JSON_API;
 
 
 class WP_Error {
-	public static $code;
-	public static $message;
-	public static $data;
+	public $code;
+	public $message;
+	public $data;
 
 	function __construct($code = '', $message = '', $data = '') {
 		$this->code = $code;
@@ -15,10 +15,10 @@ class WP_Error {
 }
 
 class WP_User {
-	public static $ID;
-	public static $login;
-	public static $blog_id;
-	public static $password;
+	public $ID;
+	public $login;
+	public $blog_id;
+	public $password;
 
 	function __construct($ID, $login, $blog_id, $password = '') {
 		$this->ID = $ID;
@@ -29,11 +29,11 @@ class WP_User {
 }
 
 class WP_State {
-	public static $users;
-	public static $sites;
-	public static $current_user;
-	public static $current_site;
-	public static $unique_instance;
+	public $users;
+	public $sites;
+	public $current_user;
+	public $current_site;
+	public $unique_instance;
 
 	protected function __construct() {
 		$this->sites = array(

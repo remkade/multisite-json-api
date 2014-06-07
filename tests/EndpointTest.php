@@ -4,9 +4,9 @@ namespace Multisite_JSON_API;
 @include_once 'PHPUnit/Framework/TestCase.php';
 
 class EndpointTest extends \PHPUnit_Framework_TestCase {
-	public static $plugin_is_active;
-	public static $is_multisite;
-	public static $api;
+	public $plugin_is_active;
+	public $is_multisite;
+	public $api;
 	
 	protected function setUp() {
 		$_SERVER['REQUEST_METHOD'] = 'GET';
