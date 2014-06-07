@@ -1,3 +1,4 @@
+![Travis CI Build status](https://travis-ci.org/remkade/multisite-json-api.svg?branch=master)
 Wordpress Multisite JSON API
 ============================
 This is a Wordpress Plugin that adds JSON endpoints for creating, listing, and deleting sites on multisite.
