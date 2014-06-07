@@ -33,7 +33,7 @@ class WP_State {
 	public $sites;
 	public $current_user;
 	public $current_site;
-	public $unique_instance;
+	public static $unique_instance;
 
 	protected function __construct() {
 		$this->sites = array(
