@@ -7,4 +7,10 @@
 			<file>tests/EndpointTest.php</file>
 		</testsuite>
 	</testsuites>
+	<filter>
+		<blacklist>
+			<file>includes/nicejson.php</file>
+			<directory suffix=".php">endpoints/</directory>
+		</blacklist>
+	</filter>
 </phpunit>
