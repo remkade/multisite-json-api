@@ -6,4 +6,4 @@ php:
 install:
   - composer install --dev
 after_script:
-  - COVERALLS_REPO_TOKEN=eFsOMzs8vxyxcJdlYSj5tcDx90vMAfAUb php vendor/bin/coveralls -v
+  - php vendor/bin/coveralls -v
