@@ -5,3 +5,5 @@ php:
   - hhvm
 install:
   - composer install --dev
+after_script:
+  - php vendor/bin/coveralls -v
