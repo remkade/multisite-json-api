@@ -1,3 +1,6 @@
 .*.swp
 *~
 *.zip
+composer.phar
+vendor/
+build/
