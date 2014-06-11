@@ -21,7 +21,7 @@ class WP_User {
 	public $password;
 	public $email;
 
-	function __construct($ID, $login, $blog_id, $password = '') {
+	function __construct($ID, $login, $blog_id, $password = '', $email = '') {
 		$this->ID = $ID;
 		$this->login = $login;
 		$this->blog_id = $blog_id;
@@ -67,8 +67,8 @@ class WP_State {
 			)
 		);
 		$this->users = array(
-			new WP_User(1, 'admin', 1, 'password'),
-			new WP_User(2, 'user', 1, 'password')
+			new WP_User(1, 'admin', 1, 'password', 'admin@example.com'),
+			new WP_User(2, 'user', 1, 'password', 'user@example.com')
 		);
 		$this->current_user = null;
 		$this->current_site = (object)$this->sites[0];
