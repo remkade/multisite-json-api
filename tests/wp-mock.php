@@ -19,11 +19,13 @@ class WP_User {
 	public $login;
 	public $blog_id;
 	public $password;
+	public $email;
 
 	function __construct($ID, $login, $blog_id, $password = '') {
 		$this->ID = $ID;
 		$this->login = $login;
 		$this->blog_id = $blog_id;
+		$this->email = $email;
 		$this->password = $password;
 	}
 }

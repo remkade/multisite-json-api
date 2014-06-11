@@ -11,9 +11,9 @@ class EndpointTest extends \PHPUnit_Framework_TestCase {
 	
 	protected function setUp() {
 		$_SERVER['REQUEST_METHOD'] = 'GET';
-		$this->plugin_is_active = true;
-		$this->is_multisite = true;
-		$this->is_subdomain = true;
+		self::$plugin_is_active = true;
+		self::$is_multisite = true;
+		self::$is_subdomain = true;
 		$this->api = new Endpoint();
 	}
 
@@ -139,6 +139,23 @@ class EndpointTest extends \PHPUnit_Framework_TestCase {
 			array(null, 'test-domain', '/test-domain/'),
 			array((object)array('domain'=>'www.example.com', 'path' => '/sub/'), 'test-site', '/sub/test-site/'),
 			array((object)array('domain'=>'api.multisite.com', 'path' => '/blog-with-dashes/'), 'coolsite', '/blog-with-dashes/coolsite/')
+		);
+	}
+
+	/**
+	 * @dataProvider fullPathWithSubdomainProvider
+	 */
+	public function testFullPathWithSubdomain($current_site, $sitename, $expected) {
+		self::$is_subdomain = true;
+		$this->assertEquals($expected, $this->api->full_path($sitename, $current_site));
+	}
+
+	public function fullPathWithSubdomainProvider() {
+		return array(
+			array(null, 'potato', '/'),
+			array(null, 'test-domain', '/'),
+			array((object)array('domain'=>'www.example.com', 'path' => '/sub/'), 'test-site', '/sub/'),
+			array((object)array('domain'=>'api.multisite.com', 'path' => '/blog-with-dashes/'), 'coolsite', '/blog-with-dashes/')
 		);
 	}
 }
