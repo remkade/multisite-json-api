@@ -69,10 +69,12 @@ class Endpoint {
 	 * @since '0.0.1'
 	 */
 	public function is_valid_sitename($candidate) {
-		if (is_subdomain_install()) {
-			return(preg_match('|^[a-zA-Z0-9-]+$|', $candidate));
+		if(is_subdomain_install()){
+			if(preg_match('/^[a-zA-Z0-9-_]+$/', $candidate))
+				return true;
+			else
+				return false;
 		} else {
-			/* This filter is documented in wp-includes/ms-functions.php */
 			$subdirectory_reserved_names = apply_filters( 'subdirectory_reserved_names', array( 'page', 'comments', 'blog', 'files', 'feed', 'wp-admin'));
 			return(!in_array($candidate, $subdirectory_reserved_names));
 		}
@@ -107,7 +109,7 @@ class Endpoint {
 		if(empty($current_site))
 			$current_site = get_current_site();
 		if(is_subdomain_install()) {
-			$newdomain = $domain . '.' . preg_replace( '|^www\.|', '', $current_site->domain );
+			$newdomain = $sitename . '.' . preg_replace( '|^www\.|', '', $current_site->domain );
 		} else {
 			$newdomain = $current_site->domain;
 		}

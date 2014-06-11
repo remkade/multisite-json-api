@@ -10,7 +10,9 @@
 	<filter>
 		<blacklist>
 			<file>includes/nicejson.php</file>
+			<file>tests/wp-mock.php</file>
 			<directory suffix=".php">endpoints/</directory>
+			<directory suffix=".php">vendor/</directory>
 		</blacklist>
 	</filter>
 	<logging>

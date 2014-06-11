@@ -29,16 +29,20 @@ if($api->json->title && $api->json->email && $api->json->domain) {
 			 */
 			$errors = array();
 			// Domain is valid?
-			if(!$api->is_valid_sitename($api->json->domain))
-				array_push($errors, "Invalid domain '" . $api->json->domain . "'");
+			if(!$api->is_valid_sitename($api->json->domain)) {
+				$api->errors("invalid_domain", "Invalid domain '" . $api->json->domain . "'", 400);
+				die();
+			}
 			// Next check Email is valid
-			if(!$api->is_valid_email($api->json->email))
-				array_push($errors, "Invalid email address: '" . $api->json->email . "'");
+			if(!$api->is_valid_email($api->json->email)) {
+				$api->error("invalid_email", "Invalid email address: '" . $api->json->email . "'");
+				die();
+			}
 			// Make sure Title is valid
-			if(!$api->is_valid_site_title($api->json->title))
-				array_push($errors, "Invalid site title is '" . $api->json->title . "'");
-			if(count($errors))
-				$api->error($errors);
+			if(!$api->is_valid_site_title($api->json->title)) {
+				$api->error("invalid_site_title", "Invalid site title '" . $api->json->title . "'");
+				die();
+			}
 
 			// Start creating stuff
 			$user_id = $api->create_user_by_email($api->json->email, $api->json->domain);
