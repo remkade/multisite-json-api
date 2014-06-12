@@ -39,7 +39,9 @@ class WP_State {
 
 	protected function __construct() {
 		$this->sites = array(
-			array('blog_id' => 1,
+			array(
+				'id' => 1,
+				'blog_id' => 1,
 				'site_id' => 1,
 				'domain' => 'example.com',
 				'path' => '/',
@@ -52,7 +54,9 @@ class WP_State {
 				'deleted' => 0,
 				'lang_id' => 0
 			),
-			array('blog_id' => 1,
+			array(
+				'id' => 1,
+				'blog_id' => 2,
 				'site_id' => 1,
 				'domain' => 'widgets.example.com',
 				'path' => '/',
@@ -87,6 +91,8 @@ function is_multisite() { return EndpointTest::$is_multisite; }
 function is_subdomain_install() { return EndpointTest::$is_subdomain; }
 function is_plugin_active_for_network($name) { return EndpointTest::$plugin_is_active; }
 function status_header($status_code) { return; }
+function wp_generate_password($length, $ignoreme) { return 'password'; }
+function wp_new_user_notification($userid, $password) { return; }
 
 function get_user_by($property = 'login', $value) {
 	$found = false;
@@ -94,6 +100,18 @@ function get_user_by($property = 'login', $value) {
 	foreach($state->users as $user) {
 		if($user->$property === $value) {
 			$found = $user;
+			break;
+		}
+	}
+	return $found;
+}
+
+function get_blog_details($id, $getall = true) {
+	$found = false;
+	$state = WP_State::get_instance();
+	foreach($state->sites as $site) {
+		if($site['id'] === $id) {
+			$found = (object)$site;
 			break;
 		}
 	}
@@ -122,19 +140,6 @@ function apply_filters($filtername, $args) {
 function sanitize_email( $email ) {
 	// Test for the minimum length the email can be
 	if ( strlen( $email ) < 3 ) {
-		/**
-		 * Filter a sanitized email address.
-		 *
-		 * This filter is evaluated under several contexts, including 'email_too_short',
-		 * 'email_no_at', 'local_invalid_chars', 'domain_period_sequence', 'domain_period_limits',
-		 * 'domain_no_periods', 'domain_no_valid_subs', or no context.
-		 *
-		 * @since 2.8.0
-		 *
-		 * @param string $email   The sanitized email address.
-		 * @param string $email   The email address, as provided to sanitize_email().
-		 * @param string $message A message to pass to the user.
-		 */
 		return "";
 	}
 
@@ -248,6 +253,14 @@ function is_email($email) {
 	return $email;
 }
 
+function email_exists($email) {
+	$user = get_user_by('email', $email);
+	if($user)
+		return $user->ID;
+	else
+		return false;
+}
+
 function is_wp_error($thing) {
 	if($thing instanceof WP_Error)
 		return true;
@@ -268,6 +281,27 @@ function get_current_site() {
 function get_current_user() {
 	$state = WP_State::get_instance();
 	return $state->current_user;
+}
+
+function wpmu_create_user($username, $email, $password) {
+	$state = WP_State::get_instance();
+	$new_user = new WP_User(count($state->users) + 1, $username, 1, $email, $password);
+	array_push($state->users, $new_user);
+	return $new_user->ID;
+}
+
+function wpmu_create_blog($domain, $path, $title, $user_id) {
+	$state = WP_State::get_instance();
+	$new_site = array(
+		"id" => count($state->sites) + 1,
+		"blog_id" => count($state->sites) + 1,
+		"site_id" => 1,
+		"domain" => $domain,
+		"user_id" => $user_id,
+		"path" => $path,
+		"title" => $title);
+	array_push($state->sites, $new_site);
+	return $new_site['blog_id'];
 }
 
 // This one is hard coded because we only require one permission

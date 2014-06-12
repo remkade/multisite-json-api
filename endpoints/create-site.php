@@ -45,7 +45,7 @@ if($api->json->title && $api->json->email && $api->json->domain) {
 			}
 
 			// Start creating stuff
-			$user_id = $api->create_user_by_email($api->json->email, $api->json->domain);
+			$user_id = $api->get_or_create_user_by_email($api->json->email, $api->json->domain);
 			if(is_wp_error($user_id)) {
 				$api->error($user_id);
 			}

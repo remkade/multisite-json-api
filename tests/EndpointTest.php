@@ -158,5 +158,39 @@ class EndpointTest extends \PHPUnit_Framework_TestCase {
 			array((object)array('domain'=>'api.multisite.com', 'path' => '/blog-with-dashes/'), 'coolsite', '/blog-with-dashes/')
 		);
 	}
+
+	public function testGetOrCreateUserByEmail() {
+		$state = WP_State::get_instance();
+		$user = $this->api->get_or_create_user_by_email('test@gmail.com', 'testCreateUserByEmail');
+		$this->assertEquals($user, get_user_by('login', 'testCreateUserByEmail'));
+
+		// Test again creating the same user, should return exactly the same user
+		$user = $this->api->get_or_create_user_by_email('test@gmail.com', 'testCreateUserByEmail');
+		$this->assertEquals($user, get_user_by('email', 'test@gmail.com'));
+	}
+
+	public function testCreateSiteWithSubdomain() {
+		self::$is_subdomain = true;
+		$state = WP_State::get_instance();
+		$site = $this->api->create_site('Site Title', 'domain', 2);
+		$this->assertNotEquals(false, $site);
+		$this->assertObjectHasAttribute('blog_id', $site);
+		$this->assertObjectHasAttribute('domain', $site);
+		$this->assertEquals('domain.example.com', $site->domain);
+		$this->assertObjectHasAttribute('path', $site);
+		$this->assertEquals('/', $site->path);
+	}
+
+	public function testCreateSiteWithSubdirectory() {
+		self::$is_subdomain = false;
+		$state = WP_State::get_instance();
+		$site = $this->api->create_site('Site Title', 'domain', 2);
+		$this->assertNotEquals(false, $site);
+		$this->assertObjectHasAttribute('blog_id', $site);
+		$this->assertObjectHasAttribute('domain', $site);
+		$this->assertEquals('example.com', $site->domain);
+		$this->assertObjectHasAttribute('path', $site);
+		$this->assertEquals('/domain/', $site->path);
+	}
 }
 ?>

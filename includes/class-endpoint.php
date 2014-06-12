@@ -132,29 +132,33 @@ class Endpoint {
 	 * If it does exist, just returns the existing user's id.
 	 * Sanitizes email address automatically.
 	 */
-	public function create_user_by_email($dirty_email, $domain) {
+	public function get_or_create_user_by_email($dirty_email, $domain) {
 		$email = sanitize_email($dirty_email);
 		$user_id = email_exists($email);
 		if ($user_id) {
-			return($user_id);
+			return(get_user_by('ID', $user_id));
 		} else {
 			// Create a new user with a random password
 			$password = wp_generate_password(12, false);
 			$user_id = wpmu_create_user($domain, $password, $email);
-			if($user_id)
+			if($user_id) {
 				wp_new_user_notification($user_id, $password);
-			return($user_id);
+				return(get_user_by('ID', $user_id));
+			} else {
+				return($user_id);
+			}
 		}
 	}
 
 	public function create_site($title, $domain, $user_id) {
 		$current_site = get_current_site();
-		return wpmu_create_blog($this->full_domain($domain, $current_site),
+		$site_id = wpmu_create_blog($this->full_domain($domain, $current_site),
 			$this->full_path($domain, $current_site),
 			$title,
 			$user_id,
 			array('public' => true),
 			$current_site->id);
+		return get_blog_details($site_id);
 	}
 
 	/*
