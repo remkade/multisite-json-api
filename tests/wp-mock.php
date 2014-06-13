@@ -299,9 +299,29 @@ function wpmu_create_blog($domain, $path, $title, $user_id) {
 		"domain" => $domain,
 		"user_id" => $user_id,
 		"path" => $path,
+		"lang_id" => 1,
+		"public" => 1,
+		"mature" => 1,
+		"spam" => 0,
+		"deleted" => 0,
+		"archived" => 0,
 		"title" => $title);
 	array_push($state->sites, $new_site);
 	return $new_site['blog_id'];
+}
+
+// This should always return void to mock the silliness of WP
+function wpmu_delete_blog($id, $drop = false) {
+	$state = WP_State::get_instance();
+	for($i = 0; $i < count($state->sites); $i++) {
+		if($state->sites[$i]['id'] == $id) {
+			if($drop) {
+				array_splice($state->sites, $i, 1);
+			} else {
+				$state->sites[$i]['deleted'] = 1;
+			}
+		}
+	}
 }
 
 // This one is hard coded because we only require one permission
@@ -317,4 +337,6 @@ function wp_set_current_user($id) {
 	$state = WP_State::get_instance();
 	$state->current_user = get_user_by('ID', $id);
 }
+
+
 ?>

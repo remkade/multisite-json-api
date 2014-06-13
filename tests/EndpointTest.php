@@ -192,5 +192,51 @@ class EndpointTest extends \PHPUnit_Framework_TestCase {
 		$this->assertObjectHasAttribute('path', $site);
 		$this->assertEquals('/domain/', $site->path);
 	}
+	
+	public function testDeleteExistingSite() {
+		$state = WP_State::get_instance();
+		$site = $state->sites[count($state->sites) - 1];
+		$site = $this->api->delete_site($site['id']);
+		$this->assertNotEquals(false, $site);
+		$this->assertObjectHasAttribute('blog_id', $site);
+		$this->assertObjectHasAttribute('domain', $site);
+		$this->assertObjectHasAttribute('path', $site);
+		$this->assertTrue($site->deleted);
+	}
+
+	public function testDeleteMissingSite() {
+		$state = WP_State::get_instance();
+		$site = $this->api->delete_site(9999);
+		$this->assertFalse($site);
+	}
+
+	public function testGetExistingSiteById() {
+		$state = WP_State::get_instance();
+		$site = $this->api->get_site_by_id(1);
+		$this->assertNotEquals(false, $site);
+		$this->assertObjectHasAttribute('blog_id', $site);
+		$this->assertObjectHasAttribute('domain', $site);
+		$this->assertObjectHasAttribute('path', $site);
+	}
+
+	public function testGetMissingSiteById() {
+		$state = WP_State::get_instance();
+		$site = $this->api->get_site_by_id(9999);
+		$this->assertFalse($site);
+	}
+
+	public function testSanityCheckWhenNotMultisite() {
+		self::$is_multisite = false;
+		self::$plugin_is_active = true;
+		$this->expectOutputString("{\n    \"id\": \"not_multisite\",\n    \"message\": \"This is not a multisite install! Please enable multisite to use this plugin.\",\n    \"url\": \"http://codex.wordpress.org/Create_A_Network\"\n}");
+		$this->api->sanity_check();
+	}
+
+	public function testSanityCheckWhenActivated() {
+		self::$is_multisite = true;
+		self::$plugin_is_active = false;
+		$this->expectOutputString("{\n    \"id\": \"plugin_not_active\",\n    \"message\": \"This plugin is not active, please activate it network wide before using.\",\n    \"url\": \"http://codex.wordpress.org/Create_A_Network\"\n}");
+		$this->api->sanity_check();
+	}
 }
 ?>

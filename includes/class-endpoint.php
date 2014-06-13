@@ -24,10 +24,8 @@ class Endpoint {
 	 */
 	public function error($error, $error_id, $status=400, $url='http://github.com/remkade/multisite-json-api/wiki') {
 		if(is_array($error)) {
-			error_log(join(', ', $error));
 			$output = array('id'=> $error_id, 'message' => $error, 'url' => $url);
 		} else {
-			error_log($error);
 			$output = array('id'=> $error_id, 'message' => $error, 'url' => $url);
 		}
 		$this->respond_with_json($output, $status);
@@ -222,11 +220,17 @@ class Endpoint {
 	public function sanity_check() {
 		if(is_multisite()) {
 			if(! is_plugin_active_for_network('multisite-json-api/multisite-json-api.php'))
-				$this->error('This plugin is not active', 500);
+				$this->error('This plugin is not active, please activate it network wide before using.',
+					'plugin_not_active',
+					500,
+					'http://codex.wordpress.org/Create_A_Network');
 			else
 				return true;
 		} else {
-			error('This is not a multisite install, please enable multisite to use this plugin', 503);
+			$this->error('This is not a multisite install! Please enable multisite to use this plugin.',
+				'not_multisite',
+				503,
+				'http://codex.wordpress.org/Create_A_Network');
 		}
 	}
 
