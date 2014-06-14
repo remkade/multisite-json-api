@@ -23,11 +23,7 @@ class Endpoint {
 	 * @since '0.0.1'
 	 */
 	public function error($error, $error_id, $status=400, $url='http://github.com/remkade/multisite-json-api/wiki') {
-		if(is_array($error)) {
-			$output = array('id'=> $error_id, 'message' => $error, 'url' => $url);
-		} else {
-			$output = array('id'=> $error_id, 'message' => $error, 'url' => $url);
-		}
+		$output = array('id'=> $error_id, 'message' => $error, 'url' => $url);
 		$this->respond_with_json($output, $status);
 	}
 
@@ -133,18 +129,22 @@ class Endpoint {
 	public function get_or_create_user_by_email($dirty_email, $domain) {
 		$email = sanitize_email($dirty_email);
 		$user_id = email_exists($email);
-		if ($user_id) {
+		if ($user_id)
 			return(get_user_by('ID', $user_id));
+		// if the email doesn't exist, lets check for the login
+		// which we create from the domain
+		$user = get_user_by('login', $domain);
+		if($user) {
+			return $user;
 		} else {
 			// Create a new user with a random password
 			$password = wp_generate_password(12, false);
 			$user_id = wpmu_create_user($domain, $password, $email);
-			if($user_id) {
-				wp_new_user_notification($user_id, $password);
-				return(get_user_by('ID', $user_id));
-			} else {
-				return($user_id);
-			}
+			wp_new_user_notification($user_id, $password);
+			// Its possible for the $user_id to be false here, but it seems to
+			// be only in extreme cases where the database is failing or some
+			// other odd circumstance happens
+			return(get_user_by('ID', $user_id));
 		}
 	}
 

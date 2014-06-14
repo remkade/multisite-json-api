@@ -169,6 +169,17 @@ class EndpointTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals($user, get_user_by('email', 'test@gmail.com'));
 	}
 
+	public function testGetOrCreateUserByEmailWithExistingUsers() {
+		$state = WP_State::get_instance();
+		// Test where an email exists
+		$user = $this->api->get_or_create_user_by_email('user@example.com', 'testCreateUserByEmail');
+		$this->assertEquals($user, get_user_by('email', 'user@example.com'));
+
+		// Test where the login exists
+		$user = $this->api->get_or_create_user_by_email('notinthedb@gmail.com', 'user');
+		$this->assertEquals($user, get_user_by('login', 'user'));
+	}
+
 	public function testCreateSiteWithSubdomain() {
 		self::$is_subdomain = true;
 		$state = WP_State::get_instance();
