@@ -64,13 +64,17 @@ class Endpoint {
 	 */
 	public function is_valid_sitename($candidate) {
 		if(is_subdomain_install()){
-			if(preg_match('/^[a-zA-Z0-9-_]+$/', $candidate))
+			if(preg_match('/^[a-zA-Z0-9][a-zA-Z0-9-]+$/', $candidate))
 				return true;
 			else
 				return false;
 		} else {
-			$subdirectory_reserved_names = apply_filters( 'subdirectory_reserved_names', array( 'page', 'comments', 'blog', 'files', 'feed', 'wp-admin'));
-			return(!in_array($candidate, $subdirectory_reserved_names));
+			if(preg_match('/^[a-zA-Z0-9][a-zA-Z0-9_-]+$/', $candidate)) {
+				$reserved = apply_filters( 'subdirectory_reserved_names', array( 'page', 'comments', 'blog', 'files', 'feed'));
+				return !in_array($candidate, $reserved);
+			} else {
+				return false;
+			}
 		}
 	}
 

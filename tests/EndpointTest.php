@@ -44,18 +44,39 @@ class EndpointTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @dataProvider sitenameProvider
+	 * @dataProvider sitenameProviderForSubdomain
 	 */
-	public function testIsValidSiteName($expected, $sitename) {
-		$this->assertEquals($this->api->is_valid_sitename($sitename), $expected);
+	public function testIsValidSiteNameForSubdomain($expected, $sitename) {
+		self::$is_subdomain = true;
+		$this->assertEquals($expected, $this->api->is_valid_sitename($sitename));
 	}
 
-	public function sitenameProvider() {
+	public function sitenameProviderForSubdomain() {
+		return array(
+			array(true, 'potatoes'),
+			array(true, 'dashes-are-ok'),
+			array(true, 'wp-admin'),
+			array(false, 'Odds & Ends * not $ok'),
+			array(false, 'No spaces')
+		);
+	}
+
+	/**
+	 * @dataProvider sitenameProviderForSubdirectory
+	 */
+	public function testIsValidSiteNameForSubdirectory($expected, $sitename) {
+		self::$is_subdomain = false;
+		$this->assertEquals($expected, $this->api->is_valid_sitename($sitename));
+	}
+
+	public function sitenameProviderForSubdirectory() {
 		return array(
 			array(true, 'potatoes'),
 			array(true, 'dashes-are-ok'),
 			array(false, 'Odds & Ends * not $ok'),
-			array(false, 'No spaces')
+			array(false, 'No spaces'),
+			array(false, 'wp-admin'),
+			array(false, 'wp-content')
 		);
 	}
 
@@ -236,18 +257,24 @@ class EndpointTest extends \PHPUnit_Framework_TestCase {
 		$this->assertFalse($site);
 	}
 
-	public function testSanityCheckWhenNotMultisite() {
+	public function testSanityCheckWhenNotMultisiteButActive() {
 		self::$is_multisite = false;
 		self::$plugin_is_active = true;
 		$this->expectOutputString("{\n    \"id\": \"not_multisite\",\n    \"message\": \"This is not a multisite install! Please enable multisite to use this plugin.\",\n    \"url\": \"http://codex.wordpress.org/Create_A_Network\"\n}");
 		$this->api->sanity_check();
 	}
 
-	public function testSanityCheckWhenActivated() {
+	public function testSanityCheckWhenActivatedButNotMultiSite() {
 		self::$is_multisite = true;
 		self::$plugin_is_active = false;
 		$this->expectOutputString("{\n    \"id\": \"plugin_not_active\",\n    \"message\": \"This plugin is not active, please activate it network wide before using.\",\n    \"url\": \"http://codex.wordpress.org/Create_A_Network\"\n}");
 		$this->api->sanity_check();
+	}
+
+	public function testSanityCheckWhenActivatedAndMultisite() {
+		self::$is_multisite = true;
+		self::$plugin_is_active = true;
+		$this->assertTrue($this->api->sanity_check());
 	}
 }
 ?>
