@@ -288,5 +288,60 @@ class EndpointTest extends \PHPUnit_Framework_TestCase {
 		self::$plugin_is_active = true;
 		$this->assertTrue($this->api->sanity_check());
 	}
+
+	public function testSiteStringsToValuesWithArray() {
+		$site = array(
+			"id" => '14',
+			"blog_id" => '89',
+			"site_id" => '14',
+			"domain" => 'domain',
+			"user_id" => '23',
+			"path" => '/',
+			"lang_id" => 1,
+			"public" => 1,
+			"mature" => '1',
+			"spam" => 0,
+			"deleted" => 0,
+			"archived" => '0',
+			"title" => 'Title'
+		);
+		$fixed = $this->api->site_strings_to_values($site);
+		$this->assertObjectHasAttribute('archived', $fixed);
+		$this->assertObjectHasAttribute('blog_id', $fixed);
+		$this->assertTrue($fixed->mature);
+		$this->assertTrue($fixed->public);
+		$this->assertEquals($fixed->blog_id, 89);
+	}
+
+	public function testSiteStringsToValuesWithObject() {
+		$site = (object)array(
+			"id" => '14',
+			"blog_id" => '89',
+			"site_id" => '14',
+			"domain" => 'domain',
+			"user_id" => '23',
+			"path" => '/',
+			"lang_id" => 1,
+			"public" => 1,
+			"mature" => '1',
+			"spam" => 0,
+			"deleted" => 0,
+			"archived" => '0',
+			"title" => 'Title'
+		);
+		$fixed = $this->api->site_strings_to_values($site);
+		$this->assertObjectHasAttribute('archived', $fixed);
+		$this->assertObjectHasAttribute('blog_id', $fixed);
+		$this->assertTrue($fixed->mature);
+		$this->assertTrue($fixed->public);
+		$this->assertEquals($fixed->blog_id, 89);
+	}
+
+	public function testStringIntToBoolean() {
+		$this->assertTrue($this->api->string_int_to_boolean("1"));
+		$this->assertTrue($this->api->string_int_to_boolean(1));
+		$this->assertFalse($this->api->string_int_to_boolean("0"));
+		$this->assertFalse($this->api->string_int_to_boolean(0));
+	}
 }
 ?>

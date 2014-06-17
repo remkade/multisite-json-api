@@ -208,22 +208,20 @@ class Endpoint {
 	/*
 	 * TODO Have the automatic email thing configurable through Admin panel
 	 */
-	public function send_site_creation_notifications($id, $dirty_email) {
+	public function send_site_creation_notifications($site_id, $password, $dirty_email) {
 		$email = sanitize_email($dirty_email);
 		// Set the contents of the email
-		$admin_content = sprintf("New site created by Multisite JSON API User: %1$s\n\n\n\tAddress: %2$s\nName: %3$s",
-			$current_user->user_login,
-			get_site_url($id),
-			wp_unslash($title));
+		$admin_content = $this->content_for_admin_site_creation_notification($site_id);
 
 		// Send the email to admins
 		wp_mail(get_site_option('admin_email'),
-			sprintf('[%s] New Site Created', $current_site->site_name),
+			sprintf('[%s] New Site Created', get_current_site()->site_name),
 			$admin_content,
-			'From: "Mannasites Webmonkey" <' . get_site_option('admin_email') . '>');
+			'From: "Wordpress" <' . get_site_option('admin_email') . '>');
 
 		// Send the email to the owner of the new site
-		wpmu_welcome_notification( $id, $user_id, $password, $title, array( 'public' => 1 ));
+		// Password should have already been sent by the new user creation
+		wpmu_welcome_notification( $site_id, $user_id, '*********', $title, array( 'public' => 1 ));
 	}
 
 	private function plugin_is_active() {
