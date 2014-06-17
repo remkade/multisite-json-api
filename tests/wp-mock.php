@@ -110,7 +110,7 @@ function get_blog_details($id, $getall = true) {
 	$found = false;
 	$state = WP_State::get_instance();
 	foreach($state->sites as $site) {
-		if($site['id'] === $id) {
+		if($site['blog_id'] === $id) {
 			$found = (object)$site;
 			break;
 		}
@@ -338,5 +338,12 @@ function wp_set_current_user($id) {
 	$state->current_user = get_user_by('ID', $id);
 }
 
+function wp_get_current_user() {
+	$state = WP_State::get_instance();
+	return $state->current_user;
+}
 
+function wp_unslash($text = '') {
+	return gsub('\\', '', $text);
+}
 ?>

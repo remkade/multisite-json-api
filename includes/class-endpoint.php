@@ -2,6 +2,8 @@
 
 namespace Multisite_JSON_API;
 
+include 'exceptions.php';
+
 class Endpoint {
 	function __construct($testing=false){
 		$this->json = $this->get_post_data();
@@ -189,6 +191,18 @@ class Endpoint {
 			return $this->site_strings_to_values($site);
 		else
 			return $site;
+	}
+
+	public function content_for_admin_site_creation_notification($site_id) {
+		$site = $this->get_site_by_id($site_id);
+		if($site) {
+			$url = 'http://'.$site->domain.$site->path;
+			return sprintf("New site created by Multisite JSON API\n\n\tUser: %s\n\n\n\tAddress: %s",
+				wp_get_current_user()->login,
+				$url);
+		} else {
+			throw new SiteNotFoundException("Site ID doesn't exist");
+		}
 	}
 
 	/*

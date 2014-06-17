@@ -257,6 +257,18 @@ class EndpointTest extends \PHPUnit_Framework_TestCase {
 		$this->assertFalse($site);
 	}
 
+	public function testContentsForAdminSiteNotification() {
+		$output = $this->api->content_for_admin_site_creation_notification(2);
+		$this->assertEquals("New site created by Multisite JSON API\n\n\tUser: user\n\n\n\tAddress: http://widgets.example.com/", $output);
+	}
+
+	/**
+	 * @expectedException MultiSite_JSON_API\SiteNotFoundException
+	 */
+	public function testContentsForAdminSiteNotificationWithMissingSite() {
+		$output = $this->api->content_for_admin_site_creation_notification(9999);
+	}
+
 	public function testSanityCheckWhenNotMultisiteButActive() {
 		self::$is_multisite = false;
 		self::$plugin_is_active = true;
