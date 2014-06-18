@@ -8,7 +8,7 @@ $api = new Multisite_JSON_API\Endpoint();
 /*
  * Make sure we are given the correct JSON
  */
-if($api->json->title && $api->json->email && $api->json->domain) {
+if($api->json->title && $api->json->email && $api->json->site_name) {
 	/*
 	 * Authenticate the user using WordPress
 	 */
@@ -20,6 +20,7 @@ if($api->json->title && $api->json->email && $api->json->domain) {
 		if($api->user_can_create_sites()) {
 			error_log("Attempt to create site via Multisite JSON API with user '" . $_SERVER['HTTP_USER'] . "', but user does not have permission to manage sites in WordPress.");
 			$api->error("You don't have permission to manage sites", 403);
+			die();
 		/*
 		 * User can create sites
 		 */
@@ -29,8 +30,8 @@ if($api->json->title && $api->json->email && $api->json->domain) {
 			 */
 			$errors = array();
 			// Domain is valid?
-			if(!$api->is_valid_sitename($api->json->domain)) {
-				$api->errors("invalid_domain", "Invalid domain '" . $api->json->domain . "'", 400);
+			if(!$api->is_valid_sitename($api->json->site_name)) {
+				$api->errors("invalid_site_name", "Invalid site_name '" . $api->json->site_name . "'", 400);
 				die();
 			}
 			// Next check Email is valid
@@ -45,14 +46,11 @@ if($api->json->title && $api->json->email && $api->json->domain) {
 			}
 
 			// Start creating stuff
-			$user_id = $api->get_or_create_user_by_email($api->json->email, $api->json->domain);
-			if(is_wp_error($user_id)) {
-				$api->error($user_id);
-			}
-			$site_id = $api->create_site($api->json->title,
-				$api->json->domain,
-				$user_id);
-			if(is_wp_error($site_id)) {
+			$user = $api->get_or_create_user_by_email($api->json->email, $api->json->site_name);
+			$site = $api->create_site($api->json->title,
+				$api->json->site_name,
+				$user->id);
+			if($site_id) {
 				$errors = array();
 				foreach($site_id->errors as $key => $error_array) {
 					array_push($errors, $error_array[0]);
@@ -63,7 +61,7 @@ if($api->json->title && $api->json->email && $api->json->domain) {
 			$api->respond_with_json(array(
 				"success"=>true,
 				"messages"=>array('Site created'),
-				"url" => str_replace('\\', '', get_site_url($site_id))
+				"url" => get_site_url($site_id)
 			), 201);
 		}
 	} else {
@@ -71,6 +69,6 @@ if($api->json->title && $api->json->email && $api->json->domain) {
 		die();
 	}
 } else {
-	$api->error('This endpoint needs a JSON payload of the form {"title": "Site Title", "email": "user@email.com", "domain": "sitedomain.com"}');
+	$api->error('This endpoint needs a JSON payload of the form {"title": "My New Blog", "email": "user@email.com", "site_name": "my-new-blog"}');
 }
 ?>

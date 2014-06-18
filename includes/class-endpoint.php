@@ -127,25 +127,28 @@ class Endpoint {
 		return $path;
 	}
 
-	/*
+	/**
 	 * Creates a new user if one doesn't already exist.
 	 * If it does exist, just returns the existing user's id.
 	 * Sanitizes email address automatically.
+	 * @param dirty_email string An unsanitized email
+	 * @param username string The username
+	 * @return user WP_User The Wordpress user object
 	 */
-	public function get_or_create_user_by_email($dirty_email, $domain) {
+	public function get_or_create_user_by_email($dirty_email, $username) {
 		$email = sanitize_email($dirty_email);
 		$user_id = email_exists($email);
-		if ($user_id)
+		if($user_id)
 			return(get_user_by('ID', $user_id));
 		// if the email doesn't exist, lets check for the login
 		// which we create from the domain
-		$user = get_user_by('login', $domain);
+		$user = get_user_by('login', $username);
 		if($user) {
 			return $user;
 		} else {
 			// Create a new user with a random password
 			$password = wp_generate_password(12, false);
-			$user_id = wpmu_create_user($domain, $password, $email);
+			$user_id = wpmu_create_user($username, $password, $email);
 			wp_new_user_notification($user_id, $password);
 			// Its possible for the $user_id to be false here, but it seems to
 			// be only in extreme cases where the database is failing or some
@@ -154,15 +157,26 @@ class Endpoint {
 		}
 	}
 
-	public function create_site($title, $domain, $user_id) {
+	/**
+	 * Creates a new site.
+	 * @param titel string The title of the site
+	 * @param site_name string The sitename used for the site, will become the path or the subdomain
+	 * @param user_id The ID of the admin user for this site
+	 * @return site Object An objectified version of the site
+	 */
+	public function create_site($title, $site_name, $user_id) {
 		$current_site = get_current_site();
-		$site_id = wpmu_create_blog($this->full_domain($domain, $current_site),
-			$this->full_path($domain, $current_site),
+		$site_id = wpmu_create_blog($this->full_domain($site_name, $current_site),
+			$this->full_path($site_name, $current_site),
 			$title,
 			$user_id,
 			array('public' => true),
 			$current_site->id);
-		return get_blog_details($site_id);
+
+		if($site_id instanceof WP_Error)
+			throw new SiteCreationException('Error creating site: '.$site_id->get_error_message());
+		else
+			return $this->get_site_by_id($site_id);
 	}
 
 	/*
