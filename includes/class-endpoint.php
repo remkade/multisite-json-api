@@ -29,6 +29,15 @@ class Endpoint {
 		$this->respond_with_json($output, $status);
 	}
 
+	/**
+	 * Takes an exception and calls the error function with it's details
+	 * @since '0.5.0'
+	 * @param e GenericException A multisite JSON API Generic Exception derivative
+	 */
+	public function json_exception(GenericException $e) {
+		$this->error($e->getMessage(), $e->id, $e->getCode(), $e->url);
+	}
+
 	/*
 	 * Pulls the post data in a hacky way required by PHP :(
 	 * @since '0.0.1'
@@ -137,9 +146,11 @@ class Endpoint {
 	 */
 	public function get_or_create_user_by_email($dirty_email, $username) {
 		$email = sanitize_email($dirty_email);
-		$user_id = email_exists($email);
-		if($user_id)
-			return(get_user_by('ID', $user_id));
+		if($email === "")
+			throw new UserCreationError('Error creating user: email is invalid');
+		$user = get_user_by('email', $email);
+		if($user)
+			return $user;
 		// if the email doesn't exist, lets check for the login
 		// which we create from the domain
 		$user = get_user_by('login', $username);
@@ -153,7 +164,7 @@ class Endpoint {
 			// Its possible for the $user_id to be false here, but it seems to
 			// be only in extreme cases where the database is failing or some
 			// other odd circumstance happens
-			return(get_user_by('ID', $user_id));
+			return(get_user_by('id', $user_id));
 		}
 	}
 
@@ -173,7 +184,7 @@ class Endpoint {
 			array('public' => true),
 			$current_site->id);
 
-		if($site_id instanceof WP_Error)
+		if(!is_numeric($site_id))
 			throw new SiteCreationException('Error creating site: '.$site_id->get_error_message());
 		else
 			return $this->get_site_by_id($site_id);

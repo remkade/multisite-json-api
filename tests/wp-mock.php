@@ -96,6 +96,8 @@ function wp_new_user_notification($userid, $password) { return; }
 
 function get_user_by($property = 'login', $value) {
 	$found = false;
+	if($property == 'id')
+		$property = 'ID';
 	$state = WP_State::get_instance();
 	foreach($state->users as $user) {
 		if($user->$property === $value) {
@@ -209,7 +211,6 @@ function sanitize_email( $email ) {
 	$email = $local . '@' . $domain;
 
 	// Congratulations your email made it!
-	/** This filter is documented in wp-includes/formatting.php */
 	return $email;
 }
 
@@ -335,7 +336,7 @@ function current_user_can($permission) {
 
 function wp_set_current_user($id) {
 	$state = WP_State::get_instance();
-	$state->current_user = get_user_by('ID', $id);
+	$state->current_user = get_user_by('id', $id);
 }
 
 function wp_get_current_user() {

@@ -8,7 +8,7 @@ $api = new Multisite_JSON_API\Endpoint();
 /*
  * Make sure we are given the correct JSON
  */
-if($api->json->title && $api->json->email && $api->json->site_name) {
+if(isset($api->json->title) && isset($api->json->email) && isset($api->json->site_name)) {
 	/*
 	 * Authenticate the user using WordPress
 	 */
@@ -46,29 +46,30 @@ if($api->json->title && $api->json->email && $api->json->site_name) {
 			}
 
 			// Start creating stuff
-			$user = $api->get_or_create_user_by_email($api->json->email, $api->json->site_name);
-			$site = $api->create_site($api->json->title,
-				$api->json->site_name,
-				$user->id);
-			if($site_id) {
-				$errors = array();
-				foreach($site_id->errors as $key => $error_array) {
-					array_push($errors, $error_array[0]);
-				}
-				$api->error($errors);
+			try {
+				$user = $api->get_or_create_user_by_email($api->json->email, $api->json->site_name);
+			} catch(MultiSite_JSON_API\UserCreationError $e) {
+				$api->json_exception($e);
+				die();
 			}
-			$api->send_site_creation_notifications($site_id, $api->json->email);
-			$api->respond_with_json(array(
-				"success"=>true,
-				"messages"=>array('Site created'),
-				"url" => get_site_url($site_id)
-			), 201);
+			try {
+				$site = $api->create_site($api->json->title,
+					$api->json->site_name,
+					$user->ID);
+			} catch(MultiSite_JSON_API\SiteCreationException $e) {
+				$api->json_exception($e);
+				die();
+			}
+			$api->send_site_creation_notifications($site->id, $api->json->email);
+			$api->respond_with_json($site, 201);
 		}
 	} else {
-		$api->error('Invalid Username or Password', 403);
+		$api->error('Invalid Username or Password', 'access_denied', 403);
 		die();
 	}
 } else {
-	$api->error('This endpoint needs a JSON payload of the form {"title": "My New Blog", "email": "user@email.com", "site_name": "my-new-blog"}');
+	$api->error('This endpoint needs a JSON payload of the form {"title": "My New Blog", "email": "user@email.com", "site_name": "my-new-blog"}',
+		'invalid_parameters',
+		400);
 }
 ?>

@@ -22,6 +22,11 @@ class EndpointTest extends \PHPUnit_Framework_TestCase {
 		$this->api->error("Error!", "error_id", 400);
 	}
 
+	public function testJSONException(){
+		$this->expectOutputString("{\n    \"id\": \"site_creation_error\",\n    \"message\": \"Error Creating Site\",\n    \"url\": \"http://github.com/remkade/multisite-json-api\"\n}");
+		$this->api->json_exception(new SiteCreationException());
+	}
+
 	/**
 	 * @dataProvider authenticateProvider
 	 */
