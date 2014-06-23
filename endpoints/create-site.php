@@ -60,7 +60,7 @@ if(isset($api->json->title) && isset($api->json->email) && isset($api->json->sit
 				$api->json_exception($e);
 				die();
 			}
-			$api->send_site_creation_notifications($site->id, $api->json->email);
+			$api->send_site_creation_notifications($site->blog_id, $api->json->email);
 			$api->respond_with_json($site, 201);
 		}
 	} else {
