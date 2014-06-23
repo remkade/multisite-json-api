@@ -241,10 +241,12 @@ class EndpointTest extends \PHPUnit_Framework_TestCase {
 		$this->assertTrue($site->deleted);
 	}
 
+	/**
+	 * @expectedException MultiSite_JSON_API\SiteNotFoundException
+	 */
 	public function testDeleteMissingSite() {
 		$state = WP_State::get_instance();
 		$site = $this->api->delete_site(9999);
-		$this->assertFalse($site);
 	}
 
 	public function testGetExistingSiteById() {

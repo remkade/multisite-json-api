@@ -194,15 +194,16 @@ class Endpoint {
 	 * Wraps the wordpress delete blog function
 	 * Apparently, this returns NULL always, so I wrap it to return the site or false if site doesn't exist.
 	 * @since '0.5.0'
+	 * @TODO figure out why this will return the base site when drop=true
 	 */
 	public function delete_site($id, $drop = false) {
-		$site = $this->get_site_by_id($id);
-		if($site){
+		$deleteme = $this->get_site_by_id($id);
+		if($deleteme != false && $deleteme->blog_id == $id){
 			wpmu_delete_blog($id, $drop);
-			$site->deleted = true;
-			return $site;
+			$deleteme->deleted = true;
+			return $deleteme;
 		} else {
-			return false;
+			throw new SiteNotFoundException();
 		}
 	}
 
@@ -248,7 +249,7 @@ class Endpoint {
 
 		// Send the email to the owner of the new site
 		// Password should have already been sent by the new user creation
-		wpmu_welcome_notification( $site_id, $user->ID, '*********', $site->title, array( 'public' => 1 ));
+		wpmu_welcome_notification( $site_id, $user->ID, '*********', get_bloginfo(), array( 'public' => 1 ));
 	}
 
 	private function plugin_is_active() {

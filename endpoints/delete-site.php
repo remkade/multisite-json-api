@@ -1,4 +1,5 @@
 <?php
+include_once('../includes/boot.php');
 include_once('../includes/class-endpoint.php');
 
 $api = new Multisite_JSON_API\Endpoint();
@@ -21,22 +22,22 @@ if(isset($api->json->blog_id)) {
 		if($api->user_can_create_sites()) {
 			error_log("Attempt to delete site with user '" . $_SERVER['HTTP_USER'] . "', but user does not have permission to manage sites in WordPress.");
 			$api->error("You don't have permission to manage sites", 403);
+			die();
 		/*
 		 * User can create sites
 		 */
 		} else {
 			// Start killing stuff
-			$site_id = $api->delete_site($api->json->blog_id, $api->json->drop);
-			if(is_wp_error($site_id)) {
-				$errors = array();
-				foreach($site_id->errors as $key => $error_array) {
-					array_push($errors, $error_array[0]);
+			try {
+				$site = $api->delete_site($api->json->blog_id, $api->json->drop);
+				if($site) {
+					$site = $api->site_strings_to_values($api->get_site_by_id($site_id));
+					$api->respond_with_json($site, 202);
 				}
-				$api->error($errors);
+			} catch(MultiSite_JSON_API\SiteNotFoundException $e) {
+				$api->json_exception($e);
+				die();
 			}
-
-			$site = $api->site_strings_to_values($api->get_site_by_id($site_id));
-			$api->respond_with_json($site, 202);
 		}
 	} else {
 		$api->error('Invalid Username or Password', 403);
