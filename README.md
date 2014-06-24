@@ -8,7 +8,6 @@ This plugin aims to be simple to make Wordpress polyglot environments not only p
 Status
 ------
 * **TODO**: Add some configuration options
-* **TODO**: Add `delete-site.php`
 * **TODO**: Add `full-stack-test.php` to make a MySQL connection and verify the whole stack loads, faster and more efficient than trying to do a full page rendering for your uptime checks.
 
 Security
@@ -64,6 +63,15 @@ List Sites
 - **Payload example:** No payload, only GET variables
 - **GET Variables:** public, spam, archived, deleted
 - **Description:** Lists sites by wordpress tags. All of the variables are boolean 0 or 1, and will list sites where that variable is set to the boolean provided. For example: `?public=1&deleted=0` will list all sites that are public but not deleted.
+
+Delete Site
+-----------
+- **URL:** /wp-content/multisite-json-api/endpoints/delete-site.php
+- **Method:** DELETE
+- **Works with subdomains?:** yes
+- **Works with subdirectories?** yes
+- **Payload example:** `{"blog_id": 49, "drop": false}`
+- **Description:** Deletes a site. If `drop` is set to `true` wordpress will remove the site from the database completely. Otherwise the only thing this does is set the `deleted` attribute on the site to `true`.
 
 Acknowledgements
 ----------------

@@ -30,7 +30,7 @@ class Multisite_JSON_API {
 	 *
 	 * @var     string
 	 */
-	const VERSION = '0.5.1';
+	const VERSION = '1.0.0';
 
 	/**
 	 * @TODO - Rename "plugin-name" to the name of your plugin

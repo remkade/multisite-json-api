@@ -23,6 +23,7 @@ class Endpoint {
 	/*
 	 * Sends an error in JSON with the given status, then dies
 	 * @since '0.0.1'
+	 * @return void
 	 */
 	public function error($error, $error_id, $status=400, $url='http://github.com/remkade/multisite-json-api/wiki') {
 		$output = array('id'=> $error_id, 'message' => $error, 'url' => $url);
