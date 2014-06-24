@@ -30,10 +30,7 @@ if(isset($api->json->blog_id)) {
 			// Start killing stuff
 			try {
 				$site = $api->delete_site($api->json->blog_id, $api->json->drop);
-				if($site) {
-					$site = $api->site_strings_to_values($api->get_site_by_id($site_id));
-					$api->respond_with_json($site, 202);
-				}
+				$api->respond_with_json($site, 202);
 			} catch(MultiSite_JSON_API\SiteNotFoundException $e) {
 				$api->json_exception($e);
 				die();

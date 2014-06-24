@@ -194,7 +194,6 @@ class Endpoint {
 	 * Wraps the wordpress delete blog function
 	 * Apparently, this returns NULL always, so I wrap it to return the site or false if site doesn't exist.
 	 * @since '0.5.0'
-	 * @TODO figure out why this will return the base site when drop=true
 	 */
 	public function delete_site($id, $drop = false) {
 		$deleteme = $this->get_site_by_id($id);
