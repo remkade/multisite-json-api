@@ -53,6 +53,9 @@ None
 
 == Changelog ==
 
+= 1.0.0 =
+* Create, List, Delete are all working.
+
 = 0.5.0 =
 * Almost feature complete
 
@@ -60,6 +63,8 @@ None
 * Initial creation
 
 == Upgrade Notice ==
+= 1.0.0 =
+Full set of basic features implemented. You shouldn't be running anything before this release.
 
 = 0.5.0 =
 List and Create endpoints work.
@@ -92,6 +97,14 @@ Username and password are passed with the HTTP Headers `Username` and `Password`
 - **Payload example:** No payload, only GET variables
 - **GET Variables:** public, spam, archived, deleted
 - **Description:** Lists sites by wordpress tags. All of the variables are boolean 0 or 1, and will list sites where that variable is set to the boolean provided. For example: `?public=1&deleted=0` will list all sites that are public but not deleted.
+
+= Delete Site =
+- **URL:** /wp-content/multisite-json-api/endpoints/delete-site.php
+- **Method:** DELETE
+- **Works with subdomains?:** yes
+- **Works with subdirectories?** yes
+- **Payload example:** `{"blog_id": 49, "drop": false}`
+- **Description:** Deletes a site. If `drop` is set to `true` wordpress will remove the site from the database completely. Otherwise the only thing this does is set the `deleted` attribute on the site to `true`.
 
 == Updates ==
 
