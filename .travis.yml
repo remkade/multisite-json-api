@@ -6,4 +6,4 @@ php:
 install:
   - composer install --dev
 after_script:
-  - php vendor/bin/coveralls -v
+  - CODECLIMATE_REPO_TOKEN=b7a829dc616aee388d971653073fb32f2a891c5720b9237f0921c5bc1257ea90 ./vendor/bin/test-reporter
