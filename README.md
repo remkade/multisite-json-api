@@ -51,7 +51,7 @@ Create Site
 - **Method:** POST
 - **Works with subdomains?:** yes
 - **Works with subdirectories?** yes
-- **Payload example:** `{"email": "user@example.com", "sitename": "awesomeblog", "title": "Awesome Blog"}` 
+- **Payload example:** `{"email": "user@example.com", "site_name": "awesomeblog", "title": "Awesome Blog"}` 
 - **Description:** Creates a site. If the email address does not exist this will create a new user with that email address. The `sitename` is the the path or subdomain you would like to use.
 
 List Sites
