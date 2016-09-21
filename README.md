@@ -43,11 +43,11 @@ Authentication
 --------------
 All of the enpoints require you to authenticate with an existing wordpress user. Currently all require the superadmin role, but that may change.
 
-Username and password are passed with the HTTP Headers `Username` and `Password` respectively. These are plain text so you need to be using SSL (which you are doing already right?).
+Username and password are passed with the HTTP Headers `User` and `Password` respectively. These are plain text so you need to be using SSL (which you are doing already right?).
 
 Create Site
 -----------
-- **URL:** /wp-content/multisite-json-api/endpoints/create-site.php
+- **URL:** /wp-content/plugins/multisite-json-api/endpoints/create-site.php
 - **Method:** POST
 - **Works with subdomains?:** yes
 - **Works with subdirectories?** yes
@@ -56,7 +56,7 @@ Create Site
 
 List Sites
 ----------
-- **URL:** /wp-content/multisite-json-api/endpoints/list-sites.php
+- **URL:** /wp-content/plugins/multisite-json-api/endpoints/list-sites.php
 - **Method:** GET
 - **Works with subdomains?:** yes
 - **Works with subdirectories?** yes
@@ -66,7 +66,7 @@ List Sites
 
 Delete Site
 -----------
-- **URL:** /wp-content/multisite-json-api/endpoints/delete-site.php
+- **URL:** /wp-content/plugins/multisite-json-api/endpoints/delete-site.php
 - **Method:** DELETE
 - **Works with subdomains?:** yes
 - **Works with subdirectories?** yes
