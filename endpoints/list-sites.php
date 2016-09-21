@@ -34,7 +34,7 @@ if($user) {
 		if(isset($_GET['deleted']))
 			$deleted = $_GET['deleted'];
 
-		$sites = wp_get_sites(array(
+		$sites = get_sites(array(
 			"public" => $public,
 			"spam" => $spam,
 			"archived" => $archived,
