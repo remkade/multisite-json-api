@@ -31,7 +31,7 @@ if(isset($api->json->title) && isset($api->json->email) && isset($api->json->sit
 			$errors = array();
 			// Domain is valid?
 			if(!$api->is_valid_sitename($api->json->site_name)) {
-				$api->errors("invalid_site_name", "Invalid site_name '" . $api->json->site_name . "'", 400);
+				$api->error("invalid_site_name", "Invalid site_name '" . $api->json->site_name . "'", 400);
 				die();
 			}
 			// Next check Email is valid
