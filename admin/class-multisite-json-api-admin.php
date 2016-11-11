@@ -47,11 +47,6 @@ class Multisite_JSON_API_Admin {
 	 */
 	private function __construct() {
 
-		/*
-		 * @TODO :
-		 *
-		 * - Uncomment following lines if the admin class should only be available for super admins
-		 */
 		if( ! is_super_admin() ) {
 			return;
 		}
@@ -83,11 +78,6 @@ class Multisite_JSON_API_Admin {
 	 */
 	public static function get_instance() {
 
-		/*
-		 * @TODO :
-		 *
-		 * - Uncomment following lines if the admin class should only be available for super admins
-		 */
 		if( ! is_super_admin() ) {
 			return;
 		}

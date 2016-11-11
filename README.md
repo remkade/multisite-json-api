@@ -43,33 +43,27 @@ Authentication
 --------------
 All of the enpoints require you to authenticate with an existing wordpress user. Currently all require the superadmin role, but that may change.
 
-Username and password are passed with the HTTP Headers `Username` and `Password` respectively. These are plain text so you need to be using SSL (which you are doing already right?).
+Username and password are passed with the HTTP Headers `User` and `Password` respectively. These are plain text so you need to be using SSL (which you are doing already right?).
 
 Create Site
 -----------
-- **URL:** /wp-content/multisite-json-api/endpoints/create-site.php
+- **URL:** /wp-content/plugins/multisite-json-api/endpoints/create-site.php
 - **Method:** POST
-- **Works with subdomains?:** yes
-- **Works with subdirectories?** yes
 - **Payload example:** `{"email": "user@example.com", "site_name": "awesomeblog", "title": "Awesome Blog"}` 
 - **Description:** Creates a site. If the email address does not exist this will create a new user with that email address. The `site_name` is the the path or subdomain you would like to use.
 
 List Sites
 ----------
-- **URL:** /wp-content/multisite-json-api/endpoints/list-sites.php
+- **URL:** /wp-content/plugins/multisite-json-api/endpoints/list-sites.php
 - **Method:** GET
-- **Works with subdomains?:** yes
-- **Works with subdirectories?** yes
 - **Payload example:** No payload, only GET variables
 - **GET Variables:** public, spam, archived, deleted
 - **Description:** Lists sites by wordpress tags. All of the variables are boolean 0 or 1, and will list sites where that variable is set to the boolean provided. For example: `?public=1&deleted=0` will list all sites that are public but not deleted.
 
 Delete Site
 -----------
-- **URL:** /wp-content/multisite-json-api/endpoints/delete-site.php
+- **URL:** /wp-content/plugins/multisite-json-api/endpoints/delete-site.php
 - **Method:** DELETE
-- **Works with subdomains?:** yes
-- **Works with subdirectories?** yes
 - **Payload example:** `{"blog_id": 49, "drop": false}`
 - **Description:** Deletes a site. If `drop` is set to `true` wordpress will remove the site from the database completely. Otherwise the only thing this does is set the `deleted` attribute on the site to `true`.
 
