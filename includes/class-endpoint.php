@@ -54,8 +54,14 @@ class Endpoint {
 	 */
 	public function authenticate() {
 		$creds = array();
-		$creds['user_login'] = $_SERVER['HTTP_USER'];
-		$creds['user_password'] = $_SERVER['HTTP_PASSWORD'];
+		// Allow the usage of the standard basic auth pattern
+		if ( isset( $_SERVER['PHP_AUTH_USER'] ) ) {
+            $creds['user_login'] = $_SERVER['PHP_AUTH_USER'];
+            $creds['user_password'] = $_SERVER['PHP_AUTH_PW'];
+        } else {
+            $creds['user_login'] = $_SERVER['HTTP_USER'];
+            $creds['user_password'] = $_SERVER['HTTP_PASSWORD'];
+		}
 		$creds['remember'] = false;
 		$user = wp_signon($creds, false);
 		if(is_wp_error($user)) {
