@@ -10,6 +10,10 @@ Status
 * **TODO**: Add some configuration options
 * **TODO**: Add `full-stack-test.php` to make a MySQL connection and verify the whole stack loads, faster and more efficient than trying to do a full page rendering for your uptime checks.
 
+PHP Versions
+------------
+This was originally written on PHP 5.3.x and so is probably still compatible with that version. However, upgrading to phpunit 8 required that I make tests require PHP 7.2+. So its probably still fine to run this on something less than 7.2, but since I can't get working tests on that version, I don't recommend it.
+
 Security
 --------
 Make sure you limit access to the enpoints! You should not allow any yahoo off the internet to scan your site and look for these endpoints. I highly recommend some sort of `.htaccess` or nginx configuration settings to deny access to all but the local addresses you use for the API clients.

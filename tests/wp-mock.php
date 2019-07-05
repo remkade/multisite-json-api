@@ -1,7 +1,6 @@
 <?php
 namespace Multisite_JSON_API;
 
-
 class WP_Error {
 	public $code;
 	public $message;
