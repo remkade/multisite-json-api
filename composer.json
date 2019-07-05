@@ -1,6 +1,7 @@
 {
 	"require-dev": {
 		"satooshi/php-coveralls": "dev-master",
-		"codeclimate/php-test-reporter": "dev-master"
+		"codeclimate/php-test-reporter": "dev-master",
+		"phpunit/phpunit": "^8.2"
 	}
 }

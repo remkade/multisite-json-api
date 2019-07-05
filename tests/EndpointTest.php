@@ -1,15 +1,15 @@
 <?php
+declare(strict_types=1);
 namespace Multisite_JSON_API;
+use \PHPUnit\Framework\TestCase;
 
-@include_once 'PHPUnit/Framework/TestCase.php';
-
-class EndpointTest extends \PHPUnit_Framework_TestCase {
+final class EndpointTest extends TestCase {
 	public $api;
 	public static $plugin_is_active = true;
 	public static $is_multisite = true;
 	public static $is_subdomain = true;
 	
-	protected function setUp() {
+	protected function setUp() : void {
 		$_SERVER['REQUEST_METHOD'] = 'GET';
 		self::$plugin_is_active = true;
 		self::$is_multisite = true;
@@ -241,10 +241,8 @@ class EndpointTest extends \PHPUnit_Framework_TestCase {
 		$this->assertTrue($site->deleted);
 	}
 
-	/**
-	 * @expectedException MultiSite_JSON_API\SiteNotFoundException
-	 */
 	public function testDeleteMissingSite() {
+		$this->expectException(\MultiSite_JSON_API\SiteNotFoundException::class);	
 		$state = WP_State::get_instance();
 		$site = $this->api->delete_site(9999);
 	}
@@ -269,10 +267,8 @@ class EndpointTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals("New site created by Multisite JSON API\n\n\tUser: user\n\n\n\tAddress: http://widgets.example.com/", $output);
 	}
 
-	/**
-	 * @expectedException MultiSite_JSON_API\SiteNotFoundException
-	 */
 	public function testContentsForAdminSiteNotificationWithMissingSite() {
+		$this->expectException(\MultiSite_JSON_API\SiteNotFoundException::class);	
 		$output = $this->api->content_for_admin_site_creation_notification(9999);
 	}
 
