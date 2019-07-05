@@ -1,7 +1,12 @@
 {
 	"require-dev": {
-		"satooshi/php-coveralls": "dev-master",
-		"codeclimate/php-test-reporter": "dev-master",
-		"phpunit/phpunit": "^8.2"
+		"php-coveralls/php-coveralls": "^2",
+		"codeclimate/php-test-reporter": "^0.4",
+		"phpunit/phpunit": "^8"
+	},
+	"config": {
+		"platform": {
+			"php": "7.2"
+		}
 	}
 }
