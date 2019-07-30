@@ -180,15 +180,17 @@ class Endpoint {
 	 * @param titel string The title of the site
 	 * @param site_name string The sitename used for the site, will become the path or the subdomain
 	 * @param user_id The ID of the admin user for this site
+	 * @param options The options for the new site
 	 * @return site Object An objectified version of the site
 	 */
-	public function create_site($title, $site_name, $user_id) {
+	public function create_site($title, $site_name, $user_id, $options) {
 		$current_site = get_current_site();
+		$options = array_merge(array('public' => true), (array)$options);
 		$site_id = wpmu_create_blog($this->full_domain($site_name, $current_site),
 			$this->full_path($site_name, $current_site),
 			$title,
 			$user_id,
-			array('public' => true),
+			$options,
 			$current_site->id);
 
 		if(!is_numeric($site_id))
