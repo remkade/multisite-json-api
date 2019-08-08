@@ -53,9 +53,11 @@ if(isset($api->json->title) && isset($api->json->email) && isset($api->json->sit
 				die();
 			}
 			try {
+				$options = (isset($api->json->options)) ? $api->json->options : [];
 				$site = $api->create_site($api->json->title,
 					$api->json->site_name,
-					$user->ID);
+					$user->ID,
+					$options);
 			} catch(MultiSite_JSON_API\SiteCreationException $e) {
 				$api->json_exception($e);
 				die();
