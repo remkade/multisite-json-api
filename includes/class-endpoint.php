@@ -151,7 +151,7 @@ class Endpoint {
 	 * @param username string The username
 	 * @return user WP_User The Wordpress user object
 	 */
-	public function get_or_create_user_by_email($dirty_email, $username) {
+	public function get_or_create_user_by_email($dirty_email, $username, $password = null) {
 		$email = sanitize_email($dirty_email);
 		if($email === "")
 			throw new UserCreationError('Error creating user: email is invalid');
@@ -165,7 +165,9 @@ class Endpoint {
 			return $user;
 		} else {
 			// Create a new user with a random password
-			$password = wp_generate_password(12, false);
+			if($password === null){
+				$password = wp_generate_password(12, false);
+			}
 			$user_id = wpmu_create_user($username, $password, $email);
 			wp_new_user_notification($user_id, $password);
 			// Its possible for the $user_id to be false here, but it seems to

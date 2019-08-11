@@ -53,8 +53,8 @@ Create Site
 -----------
 - **URL:** /wp-content/plugins/multisite-json-api/endpoints/create-site.php
 - **Method:** POST
-- **Payload example:** `{"email": "user@example.com", "site_name": "awesomeblog", "title": "Awesome Blog"}` 
-- **Description:** Creates a site. If the email address does not exist this will create a new user with that email address. The `site_name` is the path or subdomain you would like to use.
+- **Payload example:** `{"email": "user@example.com", "site_name": "awesomeblog", "title": "Awesome Blog", "password":"123456"}` 
+- **Description:** Creates a site. If the email address does not exist this will create a new user with that email address. The `site_name` is the path or subdomain you would like to use, password os optional, if not set will fallback to a random generated one.
 
 List Sites
 ----------
