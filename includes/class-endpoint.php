@@ -17,7 +17,7 @@ class Endpoint {
 	 */
 	public function respond_with_json($payload, $status=200) {
 		status_header($status);
-		print json_format($payload);
+		print json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 	}
 
 	/*
