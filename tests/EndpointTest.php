@@ -209,7 +209,7 @@ final class EndpointTest extends TestCase {
 	public function testCreateSiteWithSubdomain() {
 		self::$is_subdomain = true;
 		$state = WP_State::get_instance();
-		$site = $this->api->create_site('Site Title', 'domain', 2);
+		$site = $this->api->create_site('Site Title', 'domain', 2, array());
 		$this->assertNotEquals(false, $site);
 		$this->assertObjectHasAttribute('blog_id', $site);
 		$this->assertObjectHasAttribute('domain', $site);
@@ -221,7 +221,7 @@ final class EndpointTest extends TestCase {
 	public function testCreateSiteWithSubdirectory() {
 		self::$is_subdomain = false;
 		$state = WP_State::get_instance();
-		$site = $this->api->create_site('Site Title', 'domain', 2);
+		$site = $this->api->create_site('Site Title', 'domain', 2, array());
 		$this->assertNotEquals(false, $site);
 		$this->assertObjectHasAttribute('blog_id', $site);
 		$this->assertObjectHasAttribute('domain', $site);
