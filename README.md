@@ -12,7 +12,7 @@ Status
 
 PHP Versions
 ------------
-This was originally written on PHP 5.3.x and so is probably still compatible with that version. However, upgrading to phpunit 8 required that I make tests require PHP 7.2+. So its probably still fine to run this on something less than 7.2, but since I can't get working tests on that version, I don't recommend it.
+This is theoretically compatible with PHP 5.4 and higher. However, upgrading to phpunit 8 required that I make tests require PHP 7.2+. So its probably still fine to run this on something less than 7.2, but since I can't get working tests on that version, I don't recommend it.
 
 Security
 --------
