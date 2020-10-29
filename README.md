@@ -3,16 +3,16 @@ Wordpress Multisite JSON API
 ============================
 This is a Wordpress Plugin that adds JSON endpoints for creating, listing, and deleting sites on multisite.
 
-This plugin aims to be simple to make Wordpress polyglot environments not only possible, but practical. I'm not the best at PHP, ruby and Go are more my thing, hence why I'm making this API. Contributions are greatly appreciated.
+This plugin aims to be simple to make Wordpress polyglot environments not only possible, but practical. I'm not the best at PHP, Ruby and Go are more my thing, hence why I'm making this API. Contributions are greatly appreciated.
 
 Status
 ------
-* **TODO**: Add some configuration options
-* **TODO**: Add `full-stack-test.php` to make a MySQL connection and verify the whole stack loads, faster and more efficient than trying to do a full page rendering for your uptime checks.
+* **TODO**: Add some configuration options.
+* **TODO**: Add `full-stack-test.php` to make a MySQL connection and verify the whole stack loads faster and more efficient than trying to do a full page rendering for your uptime checks.
 
 PHP Versions
 ------------
-This is theoretically compatible with PHP 5.4 and higher. However, upgrading to phpunit 8 required that I make tests require PHP 7.2+. So its probably still fine to run this on something less than 7.2, but since I can't get working tests on that version, I don't recommend it.
+This is theoretically compatible with PHP 5.4 and higher. However, upgrading to phpunit 8 required that I make tests require PHP 7.2+. So, it's probably still fine to run this on something less than 7.2, but since I can't get working tests on that version, I don't recommend it.
 
 Security
 --------
@@ -38,7 +38,7 @@ location /wp-content/plugins/multisite-json-api/endpoints {
 }
 ```
 
-Also, as of right now all user names and password are passed through http Headers. That means SSL is pretty much mandatory.
+Also, as of right now all user names and passwords are passed through HTTP headers. That means SSL is pretty much mandatory.
 
 API Documentation
 =================
@@ -47,14 +47,14 @@ Authentication
 --------------
 All of the enpoints require you to authenticate with an existing wordpress user. Currently all require the superadmin role, but that may change.
 
-Username and password are passed with the HTTP Headers `User` and `Password` respectively. These are plain text so you need to be using SSL (which you are doing already right?).
+Username and password are passed with the HTTP headers `User` and `Password` respectively. These are plain text so you need to be using SSL (which you are doing already right?).
 
 Create Site
 -----------
 - **URL:** /wp-content/plugins/multisite-json-api/endpoints/create-site.php
 - **Method:** POST
 - **Payload example:** `{"email": "user@example.com", "site_name": "awesomeblog", "title": "Awesome Blog", "password":"123456"}` 
-- **Description:** Creates a site. If the email address does not exist this will create a new user with that email address. The `site_name` is the path or subdomain you would like to use, password os optional, if not set will fallback to a random generated one.
+- **Description:** Creates a site. If the email address does not exist this will create a new user with that email address. The `site_name` is the path or subdomain you would like to use, password is optional, if not set will fallback to a random generated one.
 
 List Sites
 ----------
@@ -69,7 +69,7 @@ Delete Site
 - **URL:** /wp-content/plugins/multisite-json-api/endpoints/delete-site.php
 - **Method:** DELETE
 - **Payload example:** `{"blog_id": 49, "drop": false}`
-- **Description:** Deletes a site. If `drop` is set to `true` wordpress will remove the site from the database completely. Otherwise the only thing this does is set the `deleted` attribute on the site to `true`.
+- **Description:** Deletes a site. If `drop` is set to `true` , wordpress will remove the site from the database completely. Otherwise, the only thing this does is to set the `deleted` attribute on the site to `true`.
 
 Acknowledgements
 ----------------
