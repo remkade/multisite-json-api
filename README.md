@@ -69,7 +69,7 @@ Delete Site
 - **URL:** /wp-content/plugins/multisite-json-api/endpoints/delete-site.php
 - **Method:** DELETE
 - **Payload example:** `{"blog_id": 49, "drop": false}`
-- **Description:** Deletes a site. If `drop` is set to `true` , wordpress will remove the site from the database completely. Otherwise, the only thing this does is to set the `deleted` attribute on the site to `true`.
+- **Description:** Deletes a site. If `drop` is set to `true`, wordpress will remove the site from the database completely. Otherwise, the only thing this does is to set the `deleted` attribute on the site to `true`.
 
 Acknowledgements
 ----------------
