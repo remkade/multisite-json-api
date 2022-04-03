@@ -14,10 +14,8 @@
 		"codeclimate/php-test-reporter": "*",
 		"phpunit/phpunit": "^9"
 	},
-	"config": {
-		"platform": {
-			"php": "8.1"
-		}
+	"require": {
+		"php": ">=7.3"
 	},
 	"scripts": {
 		"test": "phpunit"

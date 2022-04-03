@@ -1,4 +1,4 @@
-![Travis CI Build status](https://travis-ci.org/remkade/multisite-json-api.svg?branch=master) [![Code Climate](https://codeclimate.com/github/remkade/multisite-json-api.png)](https://codeclimate.com/github/remkade/multisite-json-api)
+[![Code Climate](https://codeclimate.com/github/remkade/multisite-json-api.png)](https://codeclimate.com/github/remkade/multisite-json-api)
 Wordpress Multisite JSON API
 ============================
 This is a Wordpress Plugin that adds JSON endpoints for creating, listing, and deleting sites on multisite.
@@ -12,7 +12,9 @@ Status
 
 PHP Versions
 ------------
-This is theoretically compatible with PHP 5.4 and higher. However, upgrading to phpunit 8 required that I make tests require PHP 7.2+. So, it's probably still fine to run this on something less than 7.2, but since I can't get working tests on that version, I don't recommend it.
+This is theoretically compatible with PHP 5.4 and higher. However, upgrading to phpunit  required that I make tests require PHP 7.2+. So, it's probably still fine to run this on something less than 7.2, but since I can't get working tests on that version, I don't recommend it.
+
+We are currently testing only on php 8.1.
 
 Security
 --------
