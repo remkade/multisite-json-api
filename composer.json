@@ -1,12 +1,15 @@
 {
 	"require-dev": {
 		"php-coveralls/php-coveralls": "^2",
-		"codeclimate/php-test-reporter": "^0.4",
-		"phpunit/phpunit": "^8"
+		"codeclimate/php-test-reporter": "*",
+		"phpunit/phpunit": "^9"
 	},
 	"config": {
 		"platform": {
-			"php": "7.2"
+			"php": "8.1"
 		}
+	},
+	"scripts": {
+		"test": "phpunit"
 	}
 }
