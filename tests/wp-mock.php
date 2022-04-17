@@ -77,7 +77,7 @@ class WP_State {
 		$this->current_site = (object)$this->sites[0];
 	}
 
-	private final function __clone() {}
+	private function __clone() {}
 	
 	public static function get_instance() {
 		if(self::$unique_instance === null)

@@ -1,12 +1,23 @@
 {
+	"name": "remkade/multisite-json-api",
+	"description": "A wordpress API for managing multisite sites",
+	"license": "GPL-2.0-only",
+	"authors": [
+		{
+			"name": "Kyle Leaders",
+			"homepage": "https://www.linkedin.com/in/kleaders/",
+			"role": "Developer"
+		}
+	],
 	"require-dev": {
 		"php-coveralls/php-coveralls": "^2",
-		"codeclimate/php-test-reporter": "^0.4",
-		"phpunit/phpunit": "^8"
+		"codeclimate/php-test-reporter": "*",
+		"phpunit/phpunit": "^9"
 	},
-	"config": {
-		"platform": {
-			"php": "7.2"
-		}
+	"require": {
+		"php": ">=7.3"
+	},
+	"scripts": {
+		"test": "phpunit"
 	}
 }

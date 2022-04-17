@@ -1,13 +1,15 @@
-<phpunit 
-	bootstrap="./bootstrap.php"
-	backupGlobals="false"
-	colors="false">
-	<testsuites>
-		<testsuite name="Endpoints">
-			<file>tests/EndpointTest.php</file>
-		</testsuite>
-	</testsuites>
-	<logging>
-		<log type="coverage-clover" target="build/logs/clover.xml"/>
-	</logging>
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="./bootstrap.php" backupGlobals="false" colors="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage>
+    <report>
+      <clover outputFile="build/logs/clover.xml"/>
+      <php outputFile="build/logs/coverage.php"/>
+    </report>
+  </coverage>
+  <testsuites>
+    <testsuite name="Endpoints">
+      <file>tests/EndpointTest.php</file>
+    </testsuite>
+  </testsuites>
+  <logging/>
 </phpunit>
