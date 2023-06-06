@@ -6,16 +6,16 @@
  * also follow WordPress Coding Standards and PHP best practices.
  *
  * @package   Multisite_JSON_API
- * @author    Kyle Leaders <kyle@technicasites.com>
+ * @author    Kyle Leaders <kyle.leaders@gmail.com>
  * @license   GPL-2.0+
- * @link      http://technicasites.com
- * @copyright 2014 Technica Sites LLC
+ * @link      https://technicasites.com/
+ * @copyright 2023 Technica Sites LLC
  *
  * @wordpress-plugin
  * Plugin Name:       Multisite JSON API
  * Plugin URI:        http://github.com/remkade/multisite-json-api
  * Description:       A JSON API for managing multisite sites
- * Version:           1.2.0
+ * Version:           1.2.1
  * Author:            Kyle Leaders
  * Author URI:        http://github.com/remkade
  * Text Domain:       en_US
@@ -58,5 +58,4 @@ add_action( 'plugins_loaded', array( 'Multisite_JSON_API', 'get_instance' ) );
 if ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
 	require_once( plugin_dir_path( __FILE__ ) . 'admin/class-multisite-json-api-admin.php' );
 	add_action( 'plugins_loaded', array( 'Multisite_JSON_API_Admin', 'get_instance' ) );
-
 }
