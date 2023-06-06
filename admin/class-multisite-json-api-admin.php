@@ -5,7 +5,7 @@
  * @package   Multisite_JSON_API_Admin
  * @author    Kyle Leaders <kyle.leaders@gmail.com>
  * @license   GPL-2.0+
- * @link      http://github.com/remkade/multisite-json-api/
+ * @link      https://github.com/remkade/multisite-json-api/
  * @copyright 2014 Kyle Leaders
  */
 

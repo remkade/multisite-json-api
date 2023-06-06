@@ -13,14 +13,14 @@
  *
  * @wordpress-plugin
  * Plugin Name:       Multisite JSON API
- * Plugin URI:        http://github.com/remkade/multisite-json-api
+ * Plugin URI:        https://github.com/remkade/multisite-json-api
  * Description:       A JSON API for managing multisite sites
  * Version:           1.2.1
  * Author:            Kyle Leaders
- * Author URI:        http://github.com/remkade
+ * Author URI:        https://github.com/remkade
  * Text Domain:       en_US
  * License:           GPL-2.0+
- * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.txt
  * Domain Path:       /languages
  * GitHub Plugin URI: https://github.com/remkade/multisite-json-api
  * WordPress-Plugin-Boilerplate: v2.6.1
