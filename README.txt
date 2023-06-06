@@ -45,7 +45,7 @@ You can install this using all the usual methods. The only thing different is th
 
 = Where is the documentation for the API? =
 
-Take a look at the [github page](http://github.com/remkade/multisite-json-api/) for the full documentation.
+Take a look at the [github page](https://github.com/remkade/multisite-json-api/) for the full documentation.
 
 == Screenshots ==
 

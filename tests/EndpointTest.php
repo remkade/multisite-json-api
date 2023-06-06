@@ -18,12 +18,12 @@ final class EndpointTest extends TestCase {
 	}
 
 	public function testErrorConformsToHerokuErrors(){
-		$this->expectOutputString("{\n    \"id\": \"error_id\",\n    \"message\": \"Error!\",\n    \"url\": \"http://github.com/remkade/multisite-json-api/wiki\"\n}");
+		$this->expectOutputString("{\n    \"id\": \"error_id\",\n    \"message\": \"Error!\",\n    \"url\": \"https://github.com/remkade/multisite-json-api/wiki\"\n}");
 		$this->api->error("Error!", "error_id", 400);
 	}
 
 	public function testJSONException(){
-		$this->expectOutputString("{\n    \"id\": \"site_creation_error\",\n    \"message\": \"Error Creating Site\",\n    \"url\": \"http://github.com/remkade/multisite-json-api\"\n}");
+		$this->expectOutputString("{\n    \"id\": \"site_creation_error\",\n    \"message\": \"Error Creating Site\",\n    \"url\": \"https://github.com/remkade/multisite-json-api\"\n}");
 		$this->api->json_exception(new SiteCreationException());
 	}
 
@@ -264,7 +264,7 @@ final class EndpointTest extends TestCase {
 
 	public function testContentsForAdminSiteNotification() {
 		$output = $this->api->content_for_admin_site_creation_notification(2);
-		$this->assertEquals("New site created by Multisite JSON API\n\n\tUser: user\n\n\n\tAddress: http://widgets.example.com/", $output);
+		$this->assertEquals("New site created by Multisite JSON API\n\n\tUser: user\n\n\n\tAddress: https://widgets.example.com/", $output);
 	}
 
 	public function testContentsForAdminSiteNotificationWithMissingSite() {
@@ -275,14 +275,14 @@ final class EndpointTest extends TestCase {
 	public function testSanityCheckWhenNotMultisiteButActive() {
 		self::$is_multisite = false;
 		self::$plugin_is_active = true;
-		$this->expectOutputString("{\n    \"id\": \"not_multisite\",\n    \"message\": \"This is not a multisite install! Please enable multisite to use this plugin.\",\n    \"url\": \"http://codex.wordpress.org/Create_A_Network\"\n}");
+		$this->expectOutputString("{\n    \"id\": \"not_multisite\",\n    \"message\": \"This is not a multisite install! Please enable multisite to use this plugin.\",\n    \"url\": \"https://codex.wordpress.org/Create_A_Network\"\n}");
 		$this->api->sanity_check();
 	}
 
 	public function testSanityCheckWhenActivatedButNotMultiSite() {
 		self::$is_multisite = true;
 		self::$plugin_is_active = false;
-		$this->expectOutputString("{\n    \"id\": \"plugin_not_active\",\n    \"message\": \"This plugin is not active, please activate it network wide before using.\",\n    \"url\": \"http://codex.wordpress.org/Create_A_Network\"\n}");
+		$this->expectOutputString("{\n    \"id\": \"plugin_not_active\",\n    \"message\": \"This plugin is not active, please activate it network wide before using.\",\n    \"url\": \"https://codex.wordpress.org/Create_A_Network\"\n}");
 		$this->api->sanity_check();
 	}
 

@@ -25,7 +25,7 @@ class Endpoint {
 	 * @since '0.0.1'
 	 * @return void
 	 */
-	public function error($error, $error_id, $status=400, $url='http://github.com/remkade/multisite-json-api/wiki') {
+	public function error($error, $error_id, $status=400, $url='https://github.com/remkade/multisite-json-api/wiki') {
 		$output = array('id'=> $error_id, 'message' => $error, 'url' => $url);
 		$this->respond_with_json($output, $status);
 	}
@@ -232,7 +232,7 @@ class Endpoint {
 	public function content_for_admin_site_creation_notification($site_id) {
 		$site = $this->get_site_by_id($site_id);
 		if($site) {
-			$url = 'http://'.$site->domain.$site->path;
+			$url = 'https://'.$site->domain.$site->path;
 			return sprintf("New site created by Multisite JSON API\n\n\tUser: %s\n\n\n\tAddress: %s",
 				wp_get_current_user()->login,
 				$url);

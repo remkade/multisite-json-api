@@ -5,8 +5,8 @@
  * @package   Multsite_JSON_API
  * @author    Kyle Leaders <kyle.leadeers@gmail.com>
  * @license   GPL-2.0+
- * @link      http://github.com/remkade/multisite-json-api
- * @copyright 2014 Kyle Leaders
+ * @link      https://github.com/remkade/multisite-json-api
+ * @copyright 2023 Technica Sites LLC
  */
 
 /**
@@ -30,7 +30,7 @@ class Multisite_JSON_API {
 	 *
 	 * @var     string
 	 */
-	const VERSION = '1.2.0';
+	const VERSION = '1.2.1';
 
 	/**
 	 * @TODO - Rename "plugin-name" to the name of your plugin
